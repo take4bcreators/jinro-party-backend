@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lnag="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket TEST</title>
+    <script src="sockjs.min.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <h1>WebSocket TEST</h1>
+    <section>
+        <h2>操作</h2>
+        <form action="">
+            <fieldset>
+                <legend>接続</legend>
+                <input type="button" value="WebSocket接続" class="connect-btn">
+            </fieldset>
+        </form>
+        <form action="">
+            <fieldset>
+                <legend>送信・受信</legend>
+                <p>
+                    <textarea name="send-msg" id="send-msg" cols="80" rows="10" placeholder="メッセージを入力"></textarea>
+                </p>
+                <p>
+                    <input type="button" value="送信" class="send-btn">
+                </p>
+            </fieldset>
+        </form>
+    </section>
+    <section>
+        <h2>受信メッセージ</h2>
+        <div class="receive-out"></div>
+    </section>
+</body>
+</html>
