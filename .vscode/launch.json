@@ -1,0 +1,42 @@
+{
+  "configurations": [
+    {
+      "name": "[01] Spring Boot サーバー起動",
+      "type": "java",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.extensionlab.jinropartybackend.JinroPartyBackendApplication",
+      "projectName": "jinro-party-backend",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env",
+      "windows": {
+        "envFile": "${workspaceFolder}\\.env"
+      }
+    },
+    {
+      "name": "[02] WebSocketテスト用Chrome起動",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8080/wstest/index.html"
+    },
+    {
+      "name": "[03] サーバー起動＋WebSocketテスト用Chrome起動",
+      "type": "java",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.extensionlab.jinropartybackend.JinroPartyBackendApplication",
+      "projectName": "jinro-party-backend",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env",
+      "windows": {
+        "envFile": "${workspaceFolder}\\.env"
+      },
+      "serverReadyAction": {
+        "pattern": "Tomcat started on port.s.: ([0-9]+) .http",
+        "uriFormat": "http://localhost:%s/wstest/index.html",
+        "action": "debugWithChrome",
+        "killOnServerStop": true
+      }
+    }
+  ]
+}
