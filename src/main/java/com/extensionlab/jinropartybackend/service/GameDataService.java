@@ -32,7 +32,7 @@ public class GameDataService {
      *            ゲーム状態を表すGameState列挙型
      */
     @Transactional
-    public void setGameState(GameState gameState) {
+    public void updateGameState(GameState gameState) {
         String gameDataId = "gd00001";
         Optional<GameData> record = this.repository.findById(gameDataId);
         GameData newGameData = record.get();
@@ -58,7 +58,7 @@ public class GameDataService {
      *            ゲーム終了フラグを表すブール値（true: ゲーム終了済み）
      */
     @Transactional
-    public void setEnd(boolean isEnd) {
+    public void updateEnd(boolean isEnd) {
         String gameDataId = "gd00001";
         Optional<GameData> record = this.repository.findById(gameDataId);
         GameData newGameData = record.get();
