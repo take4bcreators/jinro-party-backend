@@ -1,7 +1,7 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.enums;
 
 /**
- * プレイヤーの役職（列挙型）
+ * プレイヤー役職 (列挙型)
  */
 public enum PlayerRole {
     /** 市民 */

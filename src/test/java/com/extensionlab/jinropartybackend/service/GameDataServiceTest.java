@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.GameData;
-import com.extensionlab.jinropartybackend.model.GameState;
 import com.extensionlab.jinropartybackend.repository.GameDataRepository;
 
 @SpringBootTest

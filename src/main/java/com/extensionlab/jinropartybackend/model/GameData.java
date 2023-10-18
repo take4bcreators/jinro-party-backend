@@ -1,5 +1,6 @@
 package com.extensionlab.jinropartybackend.model;
 
+import com.extensionlab.jinropartybackend.enums.GameState;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

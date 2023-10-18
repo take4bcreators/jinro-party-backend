@@ -1,7 +1,7 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.enums;
 
 /**
- * ゲーム状態（列挙型）
+ * ゲーム状態 (列挙型)
  */
 public enum GameState {
     /** 未設定 */

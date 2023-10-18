@@ -1,7 +1,7 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.enums;
 
 /**
- * プレイヤーのチーム（列挙型）
+ * プレイヤーチーム (列挙型)
  */
 public enum PlayerTeam {
     /** 市民陣営 */

@@ -3,8 +3,8 @@ package com.extensionlab.jinropartybackend.service;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.GameData;
-import com.extensionlab.jinropartybackend.model.GameState;
 import com.extensionlab.jinropartybackend.repository.GameDataRepository;
 import jakarta.transaction.Transactional;
 

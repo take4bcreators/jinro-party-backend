@@ -1,5 +1,8 @@
 package com.extensionlab.jinropartybackend.model;
 
+import com.extensionlab.jinropartybackend.enums.PlayerRole;
+import com.extensionlab.jinropartybackend.enums.PlayerState;
+import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
