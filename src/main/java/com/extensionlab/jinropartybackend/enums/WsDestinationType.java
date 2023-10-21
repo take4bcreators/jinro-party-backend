@@ -18,4 +18,8 @@ public enum WsDestinationType {
     PlayerSite,
     /** 特定のプレイヤー向け */
     Player,
+    /** 宛先なし */
+    None,
+    /** 未設定（送信には使用しない） */
+    Empty,
 }

@@ -18,6 +18,8 @@ public enum WsRequestAction {
     CountdownTimerPause,
     /** カウントダウンタイマー再開 */
     CountdownTimerResume,
+    /** ゲーム状態確認 */
+    ReturnCurrentGameState,
     /** 役職確認登録 */
     RoleRegistration,
     /** 追放者投票登録 */

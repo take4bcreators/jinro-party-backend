@@ -12,4 +12,6 @@ public enum WsSenderType {
     MonitorSite,
     /** プレイヤーサイト */
     PlayerSite,
+    /** デバッグ用 */
+    Debug,
 }
