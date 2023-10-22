@@ -5,6 +5,17 @@ const WEB_SOCKET_END_POINT = '/api/ws'
 
 let socket;
 
+const sendMsgElem = document.querySelector('#send-msg');
+sendMsgElem.value = `{
+    "destinationType": "MonitorSite",
+    "destinationDeviceId": "",
+    "senderType": "Server",
+    "senderDeviceId": "",
+    "requestAction": "GameScreenChange",
+    "actionParameter01": "NightPhase",
+    "actionParameter02": "",
+    "actionParameter03": ""
+}`
 
 function writeMessage(msg) {
     const receiveOutElem = document.querySelector('.receive-out');
