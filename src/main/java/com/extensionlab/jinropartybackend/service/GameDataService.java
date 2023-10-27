@@ -3,6 +3,8 @@ package com.extensionlab.jinropartybackend.service;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.extensionlab.jinropartybackend.enums.GameMode;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.GameData;
 import com.extensionlab.jinropartybackend.repository.GameDataRepository;
@@ -34,10 +36,41 @@ public class GameDataService {
     @Transactional
     public void updateGameState(GameState gameState) {
         String gameDataId = "gd00001";
-        Optional<GameData> record = this.repository.findById(gameDataId);
-        GameData newGameData = record.get();
-        newGameData.setGameState(gameState);
+        boolean existsRecord = this.repository.existsById(gameDataId);
+        GameData newGameData = null;
+        if (existsRecord) {
+            Optional<GameData> record = this.repository.findById(gameDataId);
+            newGameData = record.get();
+            newGameData.setGameState(gameState);
+        } else {
+            GameMode gameMode = GameMode.Normal;
+            newGameData = new GameData(gameDataId, gameState, gameMode, false);
+        }
         this.repository.save(newGameData);
+        return;
+    }
+
+    /**
+     * ゲームモード設定
+     * 
+     * @param gameMode
+     *            ゲームモードを表すGameState列挙型
+     */
+    @Transactional
+    public void upsertGameMode(GameMode gameMode) {
+        String gameDataId = "gd00001";
+        boolean existsRecord = this.repository.existsById(gameDataId);
+        GameData newGameData = null;
+        if (existsRecord) {
+            Optional<GameData> record = this.repository.findById(gameDataId);
+            newGameData = record.get();
+            newGameData.setGameMode(gameMode);
+        } else {
+            GameState gameState = GameState.PreGame;
+            newGameData = new GameData(gameDataId, gameState, gameMode, false);
+        }
+        this.repository.save(newGameData);
+        return;
     }
 
     /**

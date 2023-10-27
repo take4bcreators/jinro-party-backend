@@ -1,5 +1,6 @@
 package com.extensionlab.jinropartybackend.service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,29 @@ public class PlayerInfoService {
     @Transactional
     public void registryPlayerInfo(PlayerInfo playerInfo) {
         this.repository.save(playerInfo);
+        return;
+    }
+
+    /**
+     * プレイヤーリスト登録
+     * 
+     * @param playerInfoList
+     */
+    @Transactional
+    public void registryPlayerInfoList(ArrayList<PlayerInfo> playerInfoList) {
+        this.repository.saveAll(playerInfoList);
+        return;
+    }
+
+    /**
+     * 全登録データ削除
+     * 
+     * @param deviceId
+     */
+    @Transactional
+    public void deleteAll() {
+        var gameDataId = "gd00001";
+        this.repository.deleteByGameDataId(gameDataId);
         return;
     }
 
@@ -121,4 +145,22 @@ public class PlayerInfoService {
         return;
     }
 
+    /**
+     * プレイヤー生存確認
+     * 
+     * @param deviceId
+     *            生存確認対象のデバイスID
+     * @return 生存確認結果
+     */
+    public boolean checkPlayerAlive(String deviceId) {
+        String gameDataId = "gd00001";
+        Optional<PlayerInfo> record = this.repository.findById(new PlayerInfoPK(gameDataId, deviceId));
+        if (record.isEmpty()) {
+            return false;
+        }
+        if (record.get().getPlayerState().equals(PlayerState.Alive)) {
+            return true;
+        }
+        return false;
+    }
 }

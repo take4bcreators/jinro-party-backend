@@ -56,6 +56,7 @@ public class MainWebSocketService {
         switch (receiveData.getRequestAction()) {
             case GameStateUpdate:
                 this.gameStateUpdate(receiveData);
+                this.gameScreenChange(receiveData);
                 break;
             case CountdownTimerStart:
                 // @todo
@@ -130,6 +131,21 @@ public class MainWebSocketService {
     private void gameStateUpdate(APIWsData receiveData) {
         GameState nextGameState = this.convertStringToGameState(receiveData.getActionParameter01());
         this.gameDataService.updateGameState(nextGameState);
+    }
+
+    private void gameScreenChange(APIWsData receiveData) {
+        GameState nextGameState = this.convertStringToGameState(receiveData.getActionParameter01());
+        APIWsData returnData = new APIWsData(
+                WsDestinationType.AllSite,
+                "",
+                WsSenderType.Server,
+                "",
+                WsRequestAction.GameScreenChange,
+                nextGameState.toString(),
+                "",
+                "");
+        String returnJson = this.convertWsDataToJson(returnData);
+        this.sendMessageAll(returnJson);
     }
 
     private void returnCurrentGameState(APIWsData receiveData) {
