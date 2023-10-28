@@ -148,6 +148,20 @@ public class MainWebSocketService {
         this.sendMessageAll(returnJson);
     }
 
+    public void gameScreenChange(GameState gameState) {
+        APIWsData sendData = new APIWsData(
+                WsDestinationType.AllSite,
+                "",
+                WsSenderType.Server,
+                "",
+                WsRequestAction.GameScreenChange,
+                gameState.toString(),
+                "",
+                "");
+        String sendDataJSON = this.convertWsDataToJson(sendData);
+        this.sendMessageAll(sendDataJSON);
+    }
+
     private void returnCurrentGameState(APIWsData receiveData) {
         GameState currentGameState = this.gameDataService.getGameState();
         WsDestinationType destType = null;
