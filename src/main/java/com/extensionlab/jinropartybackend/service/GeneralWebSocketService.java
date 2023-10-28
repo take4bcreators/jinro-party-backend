@@ -57,20 +57,21 @@ public class GeneralWebSocketService {
                 .stream()
                 .filter(user -> user.getId().equals(session.getId()))
                 .findFirst()
-                .ifPresent(user -> sessions.remove(user));
+                .ifPresent(user -> {
+                    sessions.remove(user);
+                    System.out.println("debug: WebSocketセッション削除: " + session.getId());
+                });
     }
 
     public void sendMessage(WebSocketSession session, String message) throws IOException {
-        System.out.println("debug: WebSocketメッセージ送信");
-        System.out.println("debug: 送信内容...");
+        System.out.println("debug: WebSocketメッセージ送信内容...");
         System.out.println(message);
         var textMessage = new TextMessage(message);
         session.sendMessage(textMessage);
     }
 
     public void sendMessageAll(WebSocketGroup webSocketGroup, String message) throws IOException {
-        System.out.println("debug: WebSocketメッセージ送信");
-        System.out.println("debug: 送信内容...");
+        System.out.println("debug: WebSocketメッセージ送信内容...");
         System.out.println(message);
         var textMessage = new TextMessage(message);
         ArrayList<WebSocketSession> sessions = this.getSessions(webSocketGroup);

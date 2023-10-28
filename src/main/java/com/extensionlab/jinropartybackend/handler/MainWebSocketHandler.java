@@ -23,7 +23,7 @@ public class MainWebSocketHandler extends TextWebSocketHandler {
     // 接続確立
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        System.out.println("debug: WebSocket接続確立");
+        System.out.println("debug: WebSocket接続確立: " + session.getId());
         this.generalWebSocketService.generateSessionsListIfNotExists(WebSocketGroup.Main);
         this.generalWebSocketService.registerSession(WebSocketGroup.Main, session);
     }
@@ -32,10 +32,7 @@ public class MainWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
         String receiveText = message.getPayload();
-
-        // Debug
-        System.out.println("debug: WebSocketメッセージ受信");
-        System.out.println("debug: メッセージ内容...");
+        System.out.println("debug: WebSocketメッセージ受信:" + session.getId() + " ／内容...");
         System.out.println(receiveText);
         this.mainWebSocketService.routeReceivedData(receiveText);
     }
@@ -43,7 +40,7 @@ public class MainWebSocketHandler extends TextWebSocketHandler {
     // 接続終了
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        System.out.println("debug: WebSocket接続終了");
+        System.out.println("debug: WebSocket接続終了: " + session.getId());
         this.generalWebSocketService.deleteSession(WebSocketGroup.Main, session);
     }
 }

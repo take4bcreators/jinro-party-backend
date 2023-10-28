@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerState;
+import com.extensionlab.jinropartybackend.enums.PlayerTeam;
+import com.extensionlab.jinropartybackend.model.EntryPlayerInfo;
 import com.extensionlab.jinropartybackend.model.PlayerInfo;
 import com.extensionlab.jinropartybackend.model.PlayerInfoPK;
 import com.extensionlab.jinropartybackend.repository.PlayerInfoRepository;
@@ -49,9 +52,31 @@ public class PlayerInfoService {
     }
 
     /**
-     * 全登録データ削除
+     * プレイヤーリスト登録（エントリーデータ受取）
      * 
-     * @param deviceId
+     * @param entryPlayerInfoList
+     */
+    @Transactional
+    public void registryPlayerFromEntryList(ArrayList<EntryPlayerInfo> entryPlayerInfoList) {
+        var playerInfoList = new ArrayList<PlayerInfo>();
+        for (EntryPlayerInfo entryPlayerInfo : entryPlayerInfoList) {
+            PlayerInfo playerInfo = new PlayerInfo(
+                    entryPlayerInfo.getGameDataId(),
+                    entryPlayerInfo.getDeviceId(),
+                    entryPlayerInfo.getSessionId(),
+                    entryPlayerInfo.getPlayerName(),
+                    entryPlayerInfo.getPlayerIcon(),
+                    PlayerRole.Empty,
+                    PlayerTeam.Empty,
+                    PlayerState.Alive);
+            playerInfoList.add(playerInfo);
+        }
+        registryPlayerInfoList(playerInfoList);
+        return;
+    }
+
+    /**
+     * 全登録データ削除
      */
     @Transactional
     public void deleteAll() {

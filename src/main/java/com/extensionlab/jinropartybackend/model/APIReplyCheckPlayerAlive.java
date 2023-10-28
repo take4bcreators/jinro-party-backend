@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class APIReplyCheckPlayerAlive {
     /** プレイヤー生存確認結果（TRUE で生存） */
-    private boolean isAlive;
+    private boolean aliveStatus;
 }

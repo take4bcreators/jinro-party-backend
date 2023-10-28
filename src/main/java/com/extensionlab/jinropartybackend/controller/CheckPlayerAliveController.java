@@ -21,8 +21,8 @@ public class CheckPlayerAliveController {
     public APIReplyCheckPlayerAlive post(@ModelAttribute APISendDeviceId postData) {
         String deviceId = postData.getDeviceId();
         System.out.println(deviceId);
-        boolean isAlive = service.checkPlayerAlive(deviceId);
-        var replyData = new APIReplyCheckPlayerAlive(isAlive);
+        boolean aliveStatus = service.checkPlayerAlive(deviceId);
+        var replyData = new APIReplyCheckPlayerAlive(aliveStatus);
         return replyData;
     }
 

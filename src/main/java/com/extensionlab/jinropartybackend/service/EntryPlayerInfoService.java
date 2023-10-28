@@ -2,6 +2,7 @@ package com.extensionlab.jinropartybackend.service;
 
 import java.util.Optional;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.extensionlab.jinropartybackend.enums.EntryPlayerState;
 import com.extensionlab.jinropartybackend.model.EntryPlayerInfo;
 import com.extensionlab.jinropartybackend.model.EntryPlayerInfoPK;
-import com.extensionlab.jinropartybackend.model.PlayerInfo;
+// import com.extensionlab.jinropartybackend.model.PlayerInfo;
 import com.extensionlab.jinropartybackend.repository.EntryPlayerInfoRepository;
 
 import jakarta.transaction.Transactional;
@@ -103,8 +104,6 @@ public class EntryPlayerInfoService {
 
     /**
      * 全登録データ削除
-     * 
-     * @param deviceId
      */
     @Transactional
     public void deleteAll() {
@@ -114,9 +113,9 @@ public class EntryPlayerInfoService {
     }
 
     /**
-     * 全エントリー済みデータ取得
+     * 全エントリー済みデータ配列取得
      * 
-     * @return
+     * @return 全エントリー済みデータ配列
      */
     public EntryPlayerInfo[] getAllEntryData() {
         var gameDataId = "gd00001";
@@ -130,7 +129,18 @@ public class EntryPlayerInfoService {
         return record.get();
     }
 
-    // public PlayerInfo[] getAllEntryDataToPlayerInfo() {
+    /**
+     * 全エントリー済みデータリスト取得
+     * 
+     * @return 全エントリー済みデータリスト
+     */
+    public ArrayList<EntryPlayerInfo> getAllEntryDataToList() {
+        EntryPlayerInfo[] entryPlayerInfos = getAllEntryData();
+        var entryPlayerInfoList = new ArrayList<EntryPlayerInfo>(Arrays.asList(entryPlayerInfos));
+        return entryPlayerInfoList;
+    }
+
+    // public ArrayList<PlayerInfo> getAllEntryDataToPlayerInfoList() {
     // EntryPlayerInfo[] allEntryData = getAllEntryData();
     // var playerInfoList = new ArrayList<PlayerInfo>();
     // for (EntryPlayerInfo entryPlayerInfo : allEntryData) {
@@ -145,27 +155,7 @@ public class EntryPlayerInfoService {
     // null);
     // playerInfoList.add(playerInfo);
     // }
-    // PlayerInfo[] playerInfoArray = playerInfoList.toArray(new
-    // PlayerInfo[playerInfoList.size()]);
-    // return playerInfoArray;
+    // return playerInfoList;
     // }
-
-    public ArrayList<PlayerInfo> getAllEntryDataToPlayerInfoList() {
-        EntryPlayerInfo[] allEntryData = getAllEntryData();
-        var playerInfoList = new ArrayList<PlayerInfo>();
-        for (EntryPlayerInfo entryPlayerInfo : allEntryData) {
-            PlayerInfo playerInfo = new PlayerInfo(
-                    entryPlayerInfo.getGameDataId(),
-                    entryPlayerInfo.getDeviceId(),
-                    entryPlayerInfo.getSessionId(),
-                    entryPlayerInfo.getPlayerName(),
-                    entryPlayerInfo.getPlayerIcon(),
-                    null,
-                    null,
-                    null);
-            playerInfoList.add(playerInfo);
-        }
-        return playerInfoList;
-    }
 
 }
