@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.enums.GameState;
-import com.extensionlab.jinropartybackend.model.gameprogressstate.DayPhaseStart;
-import com.extensionlab.jinropartybackend.model.gameprogressstate.GameProgressState;
-import com.extensionlab.jinropartybackend.model.gameprogressstate.PlayerListDisplay;
-import com.extensionlab.jinropartybackend.model.gameprogressstate.RoleAssignment;
+import com.extensionlab.jinropartybackend.model.gamestate.StateDayPhaseStart;
+import com.extensionlab.jinropartybackend.model.gamestate.BaseGameState;
+import com.extensionlab.jinropartybackend.model.gamestate.StatePlayerListDisplay;
+import com.extensionlab.jinropartybackend.model.gamestate.StateRoleAssignment;
 
 @Service
 public class GameProgressService {
@@ -16,47 +16,47 @@ public class GameProgressService {
     CountdownTimerService timerService;
 
     @Autowired
-    PlayerListDisplay playerListDisplay;
+    StatePlayerListDisplay statePlayerListDisplay;
 
     @Autowired
-    RoleAssignment roleAssignment;
+    StateRoleAssignment stateRoleAssignment;
 
     @Autowired
-    DayPhaseStart dayPhaseStart;
+    StateDayPhaseStart stateDayPhaseStart;
 
     public void startStateTask(GameState gameState) {
         System.out.println("startStateTask");
-        GameProgressState gameProgressState = null;
+        BaseGameState baseGameState = null;
         // @note ゲーム状態分岐場所
         switch (gameState) {
             case PlayerListDisplay:
-                gameProgressState = playerListDisplay;
+                baseGameState = statePlayerListDisplay;
                 break;
             case RoleAssignment:
-                gameProgressState = roleAssignment;
+                baseGameState = stateRoleAssignment;
                 break;
             case DayPhaseStart:
-                gameProgressState = dayPhaseStart;
+                baseGameState = stateDayPhaseStart;
                 break;
             default:
                 System.out.println("warning: gameState is other");
                 break;
         }
-        if (gameProgressState == null) {
+        if (baseGameState == null) {
             return;
         }
-        this.startStateTask(gameProgressState);
+        this.startStateTask(baseGameState);
     }
 
-    private void startStateTask(GameProgressState gameProgressState) {
-        int time = gameProgressState.getGameStateTime();
+    private void startStateTask(BaseGameState baseGameState) {
+        int time = baseGameState.getGameStateTime();
         if (time > 0) {
             timerService.start(time, () -> {
-                gameProgressState.runEndTask();
+                baseGameState.runEndTask();
             });
         }
         System.out.println("runStartTask");
-        gameProgressState.runStartTask();
+        baseGameState.runStartTask();
     }
 
     public void pauseTimer() {

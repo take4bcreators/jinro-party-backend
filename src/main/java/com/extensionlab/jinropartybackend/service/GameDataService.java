@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.enums.GameMode;
 import com.extensionlab.jinropartybackend.enums.GameState;
-import com.extensionlab.jinropartybackend.model.GameData;
+import com.extensionlab.jinropartybackend.model.entity.GameData;
 import com.extensionlab.jinropartybackend.repository.GameDataRepository;
 import jakarta.transaction.Transactional;
 

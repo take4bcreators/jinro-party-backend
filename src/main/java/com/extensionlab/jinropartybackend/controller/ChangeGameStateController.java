@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.extensionlab.jinropartybackend.enums.GameState;
-import com.extensionlab.jinropartybackend.model.APIReplyProcessResult;
-import com.extensionlab.jinropartybackend.model.APISendGameState;
+import com.extensionlab.jinropartybackend.model.api.APIReplyProcessResult;
+import com.extensionlab.jinropartybackend.model.api.APISendGameState;
 import com.extensionlab.jinropartybackend.service.GameDataService;
 import com.extensionlab.jinropartybackend.service.GameProgressService;
 import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;

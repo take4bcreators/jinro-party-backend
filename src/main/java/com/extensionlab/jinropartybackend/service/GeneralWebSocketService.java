@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import com.extensionlab.jinropartybackend.enums.WebSocketGroup;
-import com.extensionlab.jinropartybackend.model.WebSocketSessions;
-import com.extensionlab.jinropartybackend.model.WebSocketSessionsList;
+import com.extensionlab.jinropartybackend.model.common.WebSocketSessions;
+import com.extensionlab.jinropartybackend.model.common.WebSocketSessionsList;
 
 @Service
 public class GeneralWebSocketService {

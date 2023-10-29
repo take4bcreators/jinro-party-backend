@@ -1,8 +1,6 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.model.entity;
 
-import com.extensionlab.jinropartybackend.enums.PlayerRole;
-import com.extensionlab.jinropartybackend.enums.PlayerState;
-import com.extensionlab.jinropartybackend.enums.PlayerTeam;
+import com.extensionlab.jinropartybackend.enums.EntryPlayerState;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,9 +16,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "player_info", schema = "prd")
-@IdClass(value = PlayerInfoPK.class)
-public class PlayerInfo {
+@Table(name = "entry_player_info", schema = "prd")
+@IdClass(value = EntryPlayerInfoPK.class)
+public class EntryPlayerInfo {
 
     @Id
     @Column(name = "game_data_id")
@@ -40,18 +38,7 @@ public class PlayerInfo {
     private String playerIcon;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "player_role")
-    private PlayerRole playerRole;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "player_team")
-    private PlayerTeam playerTeam;
-
-    @Column(name = "self_role_check")
-    private boolean selfRoleCheck;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "player_state")
-    private PlayerState playerState;
+    @Column(name = "entry_player_state")
+    private EntryPlayerState entryPlayerState;
 
 }

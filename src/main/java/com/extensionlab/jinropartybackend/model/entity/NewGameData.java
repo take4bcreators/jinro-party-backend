@@ -1,7 +1,7 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.model.entity;
 
 import com.extensionlab.jinropartybackend.enums.GameMode;
-import com.extensionlab.jinropartybackend.enums.GameState;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,22 +16,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "game_data", schema = "prd")
-public class GameData {
+@Table(name = "new_game_data", schema = "prd")
+public class NewGameData {
 
     @Id
     @Column(name = "game_data_id")
     private String gameDataId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "game_state")
-    private GameState gameState;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "game_mode")
     private GameMode gameMode;
 
-    @Column(name = "is_end")
-    private boolean isEnd;
+    @Column(name = "setting_01")
+    private String setting01;
 
 }

@@ -1,4 +1,4 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.model.api;
 
 import com.extensionlab.jinropartybackend.enums.GameState;
 import lombok.AllArgsConstructor;

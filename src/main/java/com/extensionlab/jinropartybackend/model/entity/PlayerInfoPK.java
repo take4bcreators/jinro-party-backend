@@ -1,4 +1,4 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.model.entity;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class EntryPlayerInfoPK implements Serializable {
+public class PlayerInfoPK implements Serializable {
     private String gameDataId;
     private String deviceId;
 }

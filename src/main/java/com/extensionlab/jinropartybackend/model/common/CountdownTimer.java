@@ -1,4 +1,4 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.model.common;
 
 import java.util.Timer;
 

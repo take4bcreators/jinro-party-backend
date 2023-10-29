@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.enums.EntryPlayerState;
-import com.extensionlab.jinropartybackend.model.EntryPlayerInfo;
-import com.extensionlab.jinropartybackend.model.EntryPlayerInfoPK;
+import com.extensionlab.jinropartybackend.model.entity.EntryPlayerInfo;
+import com.extensionlab.jinropartybackend.model.entity.EntryPlayerInfoPK;
 import com.extensionlab.jinropartybackend.repository.EntryPlayerInfoRepository;
 
 import jakarta.transaction.Transactional;

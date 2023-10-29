@@ -12,7 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.extensionlab.jinropartybackend.enums.GameMode;
 import com.extensionlab.jinropartybackend.enums.GameState;
-import com.extensionlab.jinropartybackend.model.GameData;
+import com.extensionlab.jinropartybackend.model.entity.GameData;
 import com.extensionlab.jinropartybackend.repository.GameDataRepository;
 
 @SpringBootTest

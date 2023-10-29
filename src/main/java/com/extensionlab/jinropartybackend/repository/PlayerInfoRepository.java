@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.extensionlab.jinropartybackend.model.PlayerInfo;
-import com.extensionlab.jinropartybackend.model.PlayerInfoPK;
+import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
+import com.extensionlab.jinropartybackend.model.entity.PlayerInfoPK;
 
 public interface PlayerInfoRepository extends JpaRepository<PlayerInfo, PlayerInfoPK> {
 

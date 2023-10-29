@@ -1,14 +1,14 @@
-package com.extensionlab.jinropartybackend.model.gameprogressstate;
+package com.extensionlab.jinropartybackend.model.gamestate;
 
 import com.extensionlab.jinropartybackend.common.CommonConst;
 import com.extensionlab.jinropartybackend.enums.GameState;
 
-public abstract class GameProgressState {
+public abstract class BaseGameState {
 
     protected GameState gameState;
     protected int gameStateTime;
 
-    public GameProgressState(GameState gameState) {
+    public BaseGameState(GameState gameState) {
         this.gameState = gameState;
         this.gameStateTime = CommonConst.GameStateTime.get(gameState);
     }

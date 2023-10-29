@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerState;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
-import com.extensionlab.jinropartybackend.model.APIAllPlayerInfo;
-import com.extensionlab.jinropartybackend.model.EntryPlayerInfo;
-import com.extensionlab.jinropartybackend.model.PlayerInfo;
-import com.extensionlab.jinropartybackend.model.PlayerInfoPK;
+import com.extensionlab.jinropartybackend.model.api.APIAllPlayerInfo;
+import com.extensionlab.jinropartybackend.model.entity.EntryPlayerInfo;
+import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
+import com.extensionlab.jinropartybackend.model.entity.PlayerInfoPK;
 import com.extensionlab.jinropartybackend.repository.PlayerInfoRepository;
 import jakarta.transaction.Transactional;
 

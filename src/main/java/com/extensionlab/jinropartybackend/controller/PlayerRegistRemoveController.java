@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.extensionlab.jinropartybackend.model.APIReplyProcessResult;
-import com.extensionlab.jinropartybackend.model.APISendDeviceId;
+import com.extensionlab.jinropartybackend.model.api.APIReplyProcessResult;
+import com.extensionlab.jinropartybackend.model.api.APISendDeviceId;
 import com.extensionlab.jinropartybackend.service.EntryPlayerInfoService;
 
 @RestController

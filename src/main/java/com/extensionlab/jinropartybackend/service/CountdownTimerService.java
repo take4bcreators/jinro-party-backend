@@ -6,7 +6,7 @@ import java.util.TimerTask;
 import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.enums.TimerState;
-import com.extensionlab.jinropartybackend.model.CountdownTimer;
+import com.extensionlab.jinropartybackend.model.common.CountdownTimer;
 
 @Service
 public class CountdownTimerService {

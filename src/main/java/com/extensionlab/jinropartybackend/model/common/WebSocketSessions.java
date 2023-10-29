@@ -1,4 +1,4 @@
-package com.extensionlab.jinropartybackend.model;
+package com.extensionlab.jinropartybackend.model.common;
 
 import java.util.ArrayList;
 import org.springframework.web.socket.WebSocketSession;

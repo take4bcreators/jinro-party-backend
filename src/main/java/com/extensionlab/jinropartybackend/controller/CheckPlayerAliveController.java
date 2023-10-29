@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.extensionlab.jinropartybackend.model.APIReplyCheckPlayerAlive;
-import com.extensionlab.jinropartybackend.model.APISendDeviceId;
+import com.extensionlab.jinropartybackend.model.api.APIReplyCheckPlayerAlive;
+import com.extensionlab.jinropartybackend.model.api.APISendDeviceId;
 import com.extensionlab.jinropartybackend.service.PlayerInfoService;
 
 @RestController

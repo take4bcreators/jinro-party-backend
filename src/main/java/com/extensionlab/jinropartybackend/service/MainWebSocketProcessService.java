@@ -8,7 +8,7 @@ import com.extensionlab.jinropartybackend.enums.WebSocketGroup;
 import com.extensionlab.jinropartybackend.enums.WsDestinationType;
 import com.extensionlab.jinropartybackend.enums.WsRequestAction;
 import com.extensionlab.jinropartybackend.enums.WsSenderType;
-import com.extensionlab.jinropartybackend.model.APIWsData;
+import com.extensionlab.jinropartybackend.model.api.APIWsData;
 import com.google.gson.Gson;
 
 @Service

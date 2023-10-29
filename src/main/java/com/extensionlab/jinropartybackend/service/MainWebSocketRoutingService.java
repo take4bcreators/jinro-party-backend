@@ -2,7 +2,8 @@ package com.extensionlab.jinropartybackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.extensionlab.jinropartybackend.model.APIWsData;
+
+import com.extensionlab.jinropartybackend.model.api.APIWsData;
 
 @Service
 public class MainWebSocketRoutingService {
