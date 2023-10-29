@@ -242,4 +242,32 @@ public class PlayerInfoService {
         return apiAllPlayerInfos;
     }
 
+    /**
+     * 役職確認済み更新
+     * 
+     * @param deviceId
+     *            更新対象のデバイスID
+     */
+    @Transactional
+    public void updateSelfRoleCheck(String deviceId) {
+        PlayerInfo playerInfo = this.getPlayerInfo(deviceId);
+        playerInfo.setSelfRoleCheck(true);
+        this.repository.save(playerInfo);
+        return;
+    }
+
+    /**
+     * 全プレイヤー確認済み確認
+     * 
+     * @return
+     */
+    public boolean allPlayerChecked() {
+        String gameDataId = "gd00001";
+        long allCount = this.repository.countByGameDataId(gameDataId);
+        long checkedCount = this.repository.countByGameDataIdAndSelfRoleCheck(gameDataId, true);
+        if (allCount == checkedCount) {
+            return true;
+        }
+        return false;
+    }
 }

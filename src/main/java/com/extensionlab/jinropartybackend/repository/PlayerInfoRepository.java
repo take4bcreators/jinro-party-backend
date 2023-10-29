@@ -12,4 +12,9 @@ public interface PlayerInfoRepository extends JpaRepository<PlayerInfo, PlayerIn
     void deleteByGameDataId(String gameDataId);
 
     Optional<PlayerInfo[]> findAllByGameDataId(String gameDataId);
+
+    long countByGameDataId(String gameDataId);
+
+    long countByGameDataIdAndSelfRoleCheck(String gameDataId, boolean b);
+
 }
