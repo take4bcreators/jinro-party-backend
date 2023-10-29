@@ -12,7 +12,7 @@ import com.extensionlab.jinropartybackend.model.APIWsData;
 import com.google.gson.Gson;
 
 @Service
-public class MainWebSocketService {
+public class MainWebSocketProcessService {
 
     @Autowired
     GameDataService gameDataService;
@@ -20,104 +20,28 @@ public class MainWebSocketService {
     @Autowired
     GeneralWebSocketService generalWebSocketService;
 
-    public MainWebSocketService() {
+    public MainWebSocketProcessService() {
     }
 
-    public void routeReceivedData(String receiveText) {
-        // オブジェクトに変換
-        APIWsData receiveData = this.convertJsonToWsData(receiveText);
-
-        // 宛先判定
-        boolean isReturn = false;
-        switch (receiveData.getDestinationType()) {
-            case All:
-            case AllSite:
-            case GameMasterSite:
-            case MonitorSite:
-            case PlayerSite:
-            case Player:
-                this.sendMessageAll(receiveText);
-                isReturn = true;
-                break;
-            case None:
-            case Empty:
-                isReturn = true;
-                break;
-            case Server:
-                break;
-            default:
-                break;
-        }
-        if (isReturn) {
-            return;
-        }
-
-        // 命令判定
-        switch (receiveData.getRequestAction()) {
-            case GameStateUpdate:
-                this.gameStateUpdate(receiveData);
-                this.gameScreenChange(receiveData);
-                break;
-            case CountdownTimerStart:
-                // @todo
-                break;
-            case CountdownTimerPause:
-                // @todo
-                break;
-            case CountdownTimerResume:
-                // @todo
-                break;
-            case ReturnCurrentGameState:
-                this.returnCurrentGameState(receiveData);
-                break;
-            case RoleRegistration:
-                // @todo
-                break;
-            case ExileVoteRegistration:
-                // @todo
-                break;
-            case SurveyRegistration:
-                // @todo
-                break;
-            case SeerActionExecute:
-                // @todo
-                break;
-            case MediumActionExecute:
-                // @todo
-                break;
-            case HunterActionExecute:
-                // @todo
-                break;
-            case WerewolfAttackVote:
-                // @todo
-                break;
-            case GameEnd:
-                // @todo
-                break;
-            default:
-                break;
-        }
-        return;
-    }
-
-    private APIWsData convertJsonToWsData(String receiveText) {
+    // 汎用処理 -------------------------------------------------------------
+    public APIWsData convertJsonToWsData(String receiveText) {
         var gson = new Gson();
         APIWsData receiveData = gson.fromJson(receiveText, APIWsData.class);
         return receiveData;
     }
 
-    private String convertWsDataToJson(APIWsData sendData) {
+    public String convertWsDataToJson(APIWsData sendData) {
         var gson = new Gson();
         String sendJson = gson.toJson(sendData);
         return sendJson;
     }
 
-    private GameState convertStringToGameState(String srcText) {
+    public GameState convertStringToGameState(String srcText) {
         GameState gameState = GameState.valueOf(srcText);
         return gameState;
     }
 
-    private void sendMessageAll(String sendText) {
+    public void sendMessageAll(String sendText) {
         try {
             this.generalWebSocketService.sendMessageAll(WebSocketGroup.Main, sendText);
         } catch (IOException e) {
@@ -127,13 +51,12 @@ public class MainWebSocketService {
     }
 
     // 個々の処理 -------------------------------------------------------------
-
-    private void gameStateUpdate(APIWsData receiveData) {
+    public void gameStateUpdate(APIWsData receiveData) {
         GameState nextGameState = this.convertStringToGameState(receiveData.getActionParameter01());
         this.gameDataService.updateGameState(nextGameState);
     }
 
-    private void gameScreenChange(APIWsData receiveData) {
+    public void gameScreenChange(APIWsData receiveData) {
         GameState nextGameState = this.convertStringToGameState(receiveData.getActionParameter01());
         APIWsData returnData = new APIWsData(
                 WsDestinationType.AllSite,
@@ -162,7 +85,7 @@ public class MainWebSocketService {
         this.sendMessageAll(sendDataJSON);
     }
 
-    private void returnCurrentGameState(APIWsData receiveData) {
+    public void returnCurrentGameState(APIWsData receiveData) {
         GameState currentGameState = this.gameDataService.getGameState();
         WsDestinationType destType = null;
         switch (receiveData.getSenderType()) {
@@ -190,6 +113,38 @@ public class MainWebSocketService {
                 "");
         String returnJson = this.convertWsDataToJson(returnData);
         this.sendMessageAll(returnJson);
+    }
+
+    public GameState extractGameState(APIWsData apiWsData) {
+        String param = apiWsData.getActionParameter01();
+        GameState gameState = this.convertStringToGameState(param);
+        return gameState;
+    }
+
+    private void sendAllSite(WsRequestAction action, String param01, String param02, String param03) {
+        APIWsData returnData = new APIWsData(
+                WsDestinationType.AllSite,
+                "",
+                WsSenderType.Server,
+                "",
+                action,
+                param01,
+                param02,
+                param03);
+        String returnJson = this.convertWsDataToJson(returnData);
+        this.sendMessageAll(returnJson);
+    }
+
+    private void sendAllSite(WsRequestAction action) {
+        this.sendAllSite(action, "", "", "");
+    }
+
+    public void countdownTimerPause() {
+        this.sendAllSite(WsRequestAction.CountdownTimerPause);
+    }
+
+    public void countdownTimerResume() {
+        this.sendAllSite(WsRequestAction.CountdownTimerResume);
     }
 
 }

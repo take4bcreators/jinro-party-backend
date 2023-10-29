@@ -10,7 +10,9 @@ import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.APIReplyProcessResult;
 import com.extensionlab.jinropartybackend.model.APISendGameState;
 import com.extensionlab.jinropartybackend.service.GameDataService;
-import com.extensionlab.jinropartybackend.service.MainWebSocketService;
+import com.extensionlab.jinropartybackend.service.GameProgressService;
+import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
+// import com.extensionlab.jinropartybackend.service.MainWebSocketService;
 
 @RestController
 @CrossOrigin
@@ -19,8 +21,13 @@ public class ChangeGameStateController {
     @Autowired
     GameDataService gameDataService;
 
+    // @Autowired
+    // MainWebSocketService mainWebSocketService;
     @Autowired
-    MainWebSocketService mainWebSocketService;
+    MainWebSocketProcessService mainWebSocketProcessService;
+
+    @Autowired
+    GameProgressService gameProgressService;
 
     @PostMapping("/api/post-change-game-state")
     public APIReplyProcessResult post(@ModelAttribute APISendGameState postData) {
@@ -29,7 +36,8 @@ public class ChangeGameStateController {
         var result = new APIReplyProcessResult(false);
         try {
             gameDataService.updateGameState(gameState);
-            mainWebSocketService.gameScreenChange(gameState);
+            mainWebSocketProcessService.gameScreenChange(gameState);
+            gameProgressService.startStateTask(gameState);
             result.setResult(true);
         } catch (Exception e) {
             System.err.println(e);

@@ -7,15 +7,18 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.extensionlab.jinropartybackend.enums.WebSocketGroup;
 import com.extensionlab.jinropartybackend.service.GeneralWebSocketService;
-import com.extensionlab.jinropartybackend.service.MainWebSocketService;
+import com.extensionlab.jinropartybackend.service.MainWebSocketRoutingService;
+// import com.extensionlab.jinropartybackend.service.MainWebSocketService;
 
 public class MainWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     GeneralWebSocketService generalWebSocketService;
 
+    // @Autowired
+    // MainWebSocketService mainWebSocketService;
     @Autowired
-    MainWebSocketService mainWebSocketService;
+    MainWebSocketRoutingService mainWebSocketRoutingService;
 
     public MainWebSocketHandler() {
     }
@@ -34,7 +37,7 @@ public class MainWebSocketHandler extends TextWebSocketHandler {
         String receiveText = message.getPayload();
         System.out.println("debug: WebSocketメッセージ受信:" + session.getId() + " ／内容...");
         System.out.println(receiveText);
-        this.mainWebSocketService.routeReceivedData(receiveText);
+        this.mainWebSocketRoutingService.routeReceivedData(receiveText);
     }
 
     // 接続終了
