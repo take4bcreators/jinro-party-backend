@@ -2,11 +2,15 @@ package com.extensionlab.jinropartybackend.service;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerState;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
+import com.extensionlab.jinropartybackend.model.APIAllPlayerInfo;
 import com.extensionlab.jinropartybackend.model.EntryPlayerInfo;
 import com.extensionlab.jinropartybackend.model.PlayerInfo;
 import com.extensionlab.jinropartybackend.model.PlayerInfoPK;
@@ -60,6 +64,7 @@ public class PlayerInfoService {
     public void registryPlayerFromEntryList(ArrayList<EntryPlayerInfo> entryPlayerInfoList) {
         var playerInfoList = new ArrayList<PlayerInfo>();
         for (EntryPlayerInfo entryPlayerInfo : entryPlayerInfoList) {
+            // @note プレイヤーデータの初期値
             PlayerInfo playerInfo = new PlayerInfo(
                     entryPlayerInfo.getGameDataId(),
                     entryPlayerInfo.getDeviceId(),
@@ -68,6 +73,7 @@ public class PlayerInfoService {
                     entryPlayerInfo.getPlayerIcon(),
                     PlayerRole.Empty,
                     PlayerTeam.Empty,
+                    false,
                     PlayerState.Alive);
             playerInfoList.add(playerInfo);
         }
@@ -188,4 +194,52 @@ public class PlayerInfoService {
         }
         return false;
     }
+
+    /**
+     * 全プレイヤーデータ配列取得
+     * 
+     * @return 全プレイヤーデータ配列
+     */
+    public PlayerInfo[] getAllPlayerInfo() {
+        var gameDataId = "gd00001";
+        Optional<PlayerInfo[]> record = this.repository.findAllByGameDataId(gameDataId);
+        if (record.isEmpty()) {
+            PlayerInfo[] rtn = {};
+            return rtn;
+        }
+        return record.get();
+    }
+
+    /**
+     * 全プレイヤーデータリスト取得
+     * 
+     * @return 全プレイヤーデータリスト
+     */
+    public ArrayList<PlayerInfo> getAllPlayerInfoToList() {
+        PlayerInfo[] allPlayerInfos = getAllPlayerInfo();
+        var allPlayerInfoList = new ArrayList<PlayerInfo>(Arrays.asList(allPlayerInfos));
+        return allPlayerInfoList;
+    }
+
+    /**
+     * * 全プレイヤーデータAPI用リスト取得
+     * 
+     * @return 全プレイヤーデータAPI用リスト
+     */
+    public ArrayList<APIAllPlayerInfo> getAllPlayerInfoToListForAPI() {
+        ArrayList<PlayerInfo> getAllPlayerInfoToList = this.getAllPlayerInfoToList();
+        var apiAllPlayerInfos = new ArrayList<APIAllPlayerInfo>();
+        for (PlayerInfo playerInfo : getAllPlayerInfoToList) {
+            var apiAllPlayerInfo = new APIAllPlayerInfo(
+                    playerInfo.getDeviceId(),
+                    playerInfo.getPlayerName(),
+                    playerInfo.getPlayerIcon(),
+                    playerInfo.getPlayerRole(),
+                    playerInfo.getPlayerTeam(),
+                    playerInfo.getPlayerState());
+            apiAllPlayerInfos.add(apiAllPlayerInfo);
+        }
+        return apiAllPlayerInfos;
+    }
+
 }

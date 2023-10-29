@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.extensionlab.jinropartybackend.enums.EntryPlayerState;
 import com.extensionlab.jinropartybackend.model.EntryPlayerInfo;
 import com.extensionlab.jinropartybackend.model.EntryPlayerInfoPK;
-// import com.extensionlab.jinropartybackend.model.PlayerInfo;
 import com.extensionlab.jinropartybackend.repository.EntryPlayerInfoRepository;
 
 import jakarta.transaction.Transactional;
@@ -139,23 +138,5 @@ public class EntryPlayerInfoService {
         var entryPlayerInfoList = new ArrayList<EntryPlayerInfo>(Arrays.asList(entryPlayerInfos));
         return entryPlayerInfoList;
     }
-
-    // public ArrayList<PlayerInfo> getAllEntryDataToPlayerInfoList() {
-    // EntryPlayerInfo[] allEntryData = getAllEntryData();
-    // var playerInfoList = new ArrayList<PlayerInfo>();
-    // for (EntryPlayerInfo entryPlayerInfo : allEntryData) {
-    // PlayerInfo playerInfo = new PlayerInfo(
-    // entryPlayerInfo.getGameDataId(),
-    // entryPlayerInfo.getDeviceId(),
-    // entryPlayerInfo.getSessionId(),
-    // entryPlayerInfo.getPlayerName(),
-    // entryPlayerInfo.getPlayerIcon(),
-    // null,
-    // null,
-    // null);
-    // playerInfoList.add(playerInfo);
-    // }
-    // return playerInfoList;
-    // }
 
 }

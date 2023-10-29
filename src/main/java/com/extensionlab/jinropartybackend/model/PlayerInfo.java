@@ -47,6 +47,9 @@ public class PlayerInfo {
     @Column(name = "player_team")
     private PlayerTeam playerTeam;
 
+    @Column(name = "self_role_check")
+    private boolean selfRoleCheck;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "player_state")
     private PlayerState playerState;
