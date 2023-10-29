@@ -9,13 +9,13 @@ import com.extensionlab.jinropartybackend.service.GameDataService;
 
 @RestController
 @CrossOrigin
-public class GameStateController {
+public class GetGameStateController {
 
     @Autowired
     GameDataService service;
 
-    @GetMapping("/api/get-game-state")
-    public APIReplyGameState gameState() {
+    @GetMapping("/api/get-get-game-state")
+    public APIReplyGameState get() {
         var replyData = new APIReplyGameState(service.getGameState());
         return replyData;
     }

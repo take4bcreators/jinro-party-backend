@@ -12,7 +12,6 @@ import com.extensionlab.jinropartybackend.model.APISendGameState;
 import com.extensionlab.jinropartybackend.service.GameDataService;
 import com.extensionlab.jinropartybackend.service.GameProgressService;
 import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
-// import com.extensionlab.jinropartybackend.service.MainWebSocketService;
 
 @RestController
 @CrossOrigin
@@ -21,8 +20,6 @@ public class ChangeGameStateController {
     @Autowired
     GameDataService gameDataService;
 
-    // @Autowired
-    // MainWebSocketService mainWebSocketService;
     @Autowired
     MainWebSocketProcessService mainWebSocketProcessService;
 

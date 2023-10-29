@@ -26,11 +26,7 @@ public class ExecEntryRegistController {
     @GetMapping("/api/get-exec-entry-regist")
     public APIReplyProcessResult get() {
         var replyData = new APIReplyProcessResult(false);
-
         ArrayList<EntryPlayerInfo> allEntryData = entryPlayerInfoService.getAllEntryDataToList();
-
-        // ArrayList<PlayerInfo> allEntryData =
-        // entryPlayerInfoService.getAllEntryDataToPlayerInfoList();
         if (allEntryData.size() == 0) {
             replyData.setResult(false);
             return replyData;
@@ -38,7 +34,6 @@ public class ExecEntryRegistController {
         try {
             playerInfoService.deleteAll();
             playerInfoService.registryPlayerFromEntryList(allEntryData);
-            // playerInfoService.registryPlayerInfoList(allEntryData);
             replyData.setResult(true);
         } catch (Exception e) {
             System.err.println(e);
