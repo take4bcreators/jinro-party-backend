@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.component.gamestate.GameStateBase;
-import com.extensionlab.jinropartybackend.component.gamestate.StateDayPhaseStart;
-import com.extensionlab.jinropartybackend.component.gamestate.StatePlayerListDisplay;
-import com.extensionlab.jinropartybackend.component.gamestate.StateRoleAssignment;
 import com.extensionlab.jinropartybackend.enums.GameState;
 
 @Service
@@ -18,28 +15,22 @@ public class GameProgressService {
     CountdownTimerService timerService;
 
     @Autowired
-    StatePlayerListDisplay statePlayerListDisplay;
+    GameStateUtilService gameStateUtilService;
 
-    @Autowired
-    StateRoleAssignment stateRoleAssignment;
-
-    @Autowired
-    StateDayPhaseStart stateDayPhaseStart;
-
-    public void startStateTask(GameState gameState) {
-        Optional<GameStateBase> gameStateObject = this.getThisGameStateObject(gameState);
-        if (gameStateObject.isEmpty()) {
+    public void startStateTask(GameState gameState, GameStateService gameStateService) {
+        System.out.println("  ---- startStateTask ---- ");
+        Optional<GameStateBase> gameStateObjectWrap = this.gameStateUtilService.getThisGameStateObject(gameState);
+        if (gameStateObjectWrap.isEmpty()) {
             return;
         }
-        this.startStateTask(gameStateObject.get());
-    }
-
-    private void startStateTask(GameStateBase gameStateObject) {
+        GameStateBase gameStateObject = gameStateObjectWrap.get();
+        System.out.println("This Game State: " + gameStateObject.getThisGameState());
         gameStateObject.runInitTask();
         int time = gameStateObject.getCountdownTime();
+        System.out.println("Time: " + time);
         if (time > 0) {
             timerService.start(time, () -> {
-                gameStateObject.runEndTask();
+                gameStateObject.runEndTask(gameStateService);
             });
         }
         gameStateObject.runStartTask();
@@ -51,22 +42,6 @@ public class GameProgressService {
 
     public void resumeTimer() {
         this.timerService.resume();
-    }
-
-    private Optional<GameStateBase> getThisGameStateObject(GameState gameState) {
-        // @note 新しく状態が追加されたらここにも追加する
-        GameStateBase[] gameStateObjects = {
-                statePlayerListDisplay,
-                stateRoleAssignment,
-                stateDayPhaseStart,
-        };
-        for (GameStateBase gameStateObject : gameStateObjects) {
-            if (gameState.equals(gameStateObject.getThisGameState())) {
-                return Optional.of(gameStateObject);
-            }
-        }
-        System.out.println("warning: gameState is other");
-        return Optional.empty();
     }
 
 }

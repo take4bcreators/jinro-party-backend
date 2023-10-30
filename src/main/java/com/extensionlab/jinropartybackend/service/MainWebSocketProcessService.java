@@ -50,27 +50,6 @@ public class MainWebSocketProcessService {
         }
     }
 
-    // 個々の処理 -------------------------------------------------------------
-    public void gameStateUpdate(APIWsData receiveData) {
-        GameState nextGameState = this.convertStringToGameState(receiveData.getActionParameter01());
-        this.gameDataService.updateGameState(nextGameState);
-    }
-
-    public void gameScreenChange(APIWsData receiveData) {
-        GameState nextGameState = this.convertStringToGameState(receiveData.getActionParameter01());
-        APIWsData returnData = new APIWsData(
-                WsDestinationType.AllSite,
-                "",
-                WsSenderType.Server,
-                "",
-                WsRequestAction.GameScreenChange,
-                nextGameState.toString(),
-                "",
-                "");
-        String returnJson = this.convertWsDataToJson(returnData);
-        this.sendMessageAll(returnJson);
-    }
-
     public void gameScreenChange(GameState gameState) {
         APIWsData sendData = new APIWsData(
                 WsDestinationType.AllSite,

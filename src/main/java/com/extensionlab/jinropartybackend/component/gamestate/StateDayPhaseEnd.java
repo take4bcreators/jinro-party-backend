@@ -6,15 +6,15 @@ import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
-public class StatePlayerListDisplay extends GameStateBase {
+public class StateDayPhaseEnd extends GameStateBase {
 
-    public StatePlayerListDisplay() {
+    public StateDayPhaseEnd() {
         super(new GameStateSettings(
-                "ST05",
-                GameState.PlayerListDisplay,
-                5000,
-                GameState.Empty,
-                GameState.RoleAssignment));
+                "ST09",
+                GameState.DayPhaseEnd,
+                0,
+                GameState.DayPhase,
+                GameState.Voting));
     }
 
     @Override

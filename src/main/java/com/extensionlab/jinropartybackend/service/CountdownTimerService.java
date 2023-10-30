@@ -31,6 +31,7 @@ public class CountdownTimerService {
             return;
         }
         if (this.countdownTimer.getTimerState() == TimerState.Start) {
+            System.out.println("warm: timer is started already");
             return;
         }
 
@@ -127,8 +128,8 @@ public class CountdownTimerService {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                endTask.run();
                 serviceEndTask.run();
+                endTask.run();
             }
         };
         this.countdownTimer.getTimer().schedule(task, startTime);

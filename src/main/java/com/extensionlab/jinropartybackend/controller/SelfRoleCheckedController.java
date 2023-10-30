@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.api.APIReplyProcessResult;
 import com.extensionlab.jinropartybackend.model.api.APISendDeviceId;
-import com.extensionlab.jinropartybackend.service.GameDataService;
-import com.extensionlab.jinropartybackend.service.GameProgressService;
-import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
+import com.extensionlab.jinropartybackend.service.GameStateService;
 import com.extensionlab.jinropartybackend.service.PlayerInfoService;
 
 @RestController
@@ -22,13 +20,7 @@ public class SelfRoleCheckedController {
     PlayerInfoService playerInfoService;
 
     @Autowired
-    GameDataService gameDataService;
-
-    @Autowired
-    MainWebSocketProcessService mainWebSocketProcessService;
-
-    @Autowired
-    GameProgressService gameProgressService;
+    GameStateService gameStateService;
 
     @PostMapping("/api/post-self-role-checked")
     public APIReplyProcessResult post(@ModelAttribute APISendDeviceId postData) {
@@ -45,9 +37,7 @@ public class SelfRoleCheckedController {
         if (this.playerInfoService.allPlayerChecked()) {
             var gameState = GameState.DayPhaseStart;
             try {
-                gameDataService.updateGameState(gameState);
-                mainWebSocketProcessService.gameScreenChange(gameState);
-                gameProgressService.startStateTask(gameState);
+                this.gameStateService.execChangeStateTask(gameState);
                 replyData.setResult(true);
             } catch (Exception e) {
                 System.err.println(e);

@@ -9,22 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.api.APIReplyProcessResult;
 import com.extensionlab.jinropartybackend.model.api.APISendGameState;
-import com.extensionlab.jinropartybackend.service.GameDataService;
-import com.extensionlab.jinropartybackend.service.GameProgressService;
-import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
+import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @RestController
 @CrossOrigin
 public class ChangeGameStateController {
 
     @Autowired
-    GameDataService gameDataService;
-
-    @Autowired
-    MainWebSocketProcessService mainWebSocketProcessService;
-
-    @Autowired
-    GameProgressService gameProgressService;
+    GameStateService gameStateService;
 
     @PostMapping("/api/post-change-game-state")
     public APIReplyProcessResult post(@ModelAttribute APISendGameState postData) {
@@ -32,9 +24,7 @@ public class ChangeGameStateController {
         System.out.println(gameState);
         var result = new APIReplyProcessResult(false);
         try {
-            gameDataService.updateGameState(gameState);
-            mainWebSocketProcessService.gameScreenChange(gameState);
-            gameProgressService.startStateTask(gameState);
+            this.gameStateService.execChangeStateTask(gameState);
             result.setResult(true);
         } catch (Exception e) {
             System.err.println(e);

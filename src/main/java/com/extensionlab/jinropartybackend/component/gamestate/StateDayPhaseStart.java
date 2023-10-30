@@ -1,22 +1,18 @@
 package com.extensionlab.jinropartybackend.component.gamestate;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
-import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
+import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
 public class StateDayPhaseStart extends GameStateBase {
-
-    @Autowired
-    MainWebSocketProcessService mainWebSocketProcessService;
 
     public StateDayPhaseStart() {
         super(new GameStateSettings(
                 "ST07",
                 GameState.DayPhaseStart,
-                3000,
+                5000,
                 GameState.RoleAssignment,
                 GameState.DayPhase));
     }
@@ -26,8 +22,8 @@ public class StateDayPhaseStart extends GameStateBase {
     }
 
     @Override
-    public void runEndTask() {
-        this.mainWebSocketProcessService.gameScreenChange(this.getNexGameState());
+    public void runEndTask(GameStateService gameStateService) {
+        gameStateService.execChangeStateTask(this.getNexGameState());
     }
 
 }

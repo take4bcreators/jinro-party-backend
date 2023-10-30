@@ -14,6 +14,9 @@ public class MainWebSocketRoutingService {
     @Autowired
     GameProgressService gameProgressService;
 
+    @Autowired
+    GameStateService gameStateService;
+
     public MainWebSocketRoutingService() {
     }
 
@@ -49,10 +52,8 @@ public class MainWebSocketRoutingService {
         // 命令判定
         switch (receiveData.getRequestAction()) {
             case GameStateUpdate:
-                this.mainWebSocketProcessService.gameStateUpdate(receiveData);
-                this.mainWebSocketProcessService.gameScreenChange(receiveData);
                 var gameState = this.mainWebSocketProcessService.extractGameState(receiveData);
-                this.gameProgressService.startStateTask(gameState);
+                this.gameStateService.execChangeStateTask(gameState);
                 break;
             case CountdownTimerStart:
                 // @todo

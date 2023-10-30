@@ -270,4 +270,16 @@ public class PlayerInfoService {
         }
         return false;
     }
+
+    /**
+     * プレイヤー生存人数取得
+     * 
+     * @return
+     */
+    public int getAlivePlayerCount() {
+        String gameDataId = "gd00001";
+        long allCount = this.repository.countByGameDataIdAndPlayerState(gameDataId, PlayerState.Alive);
+        int allCountInt = Math.toIntExact(allCount);
+        return allCountInt;
+    }
 }
