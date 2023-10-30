@@ -12,7 +12,12 @@ public class StatePlayerListDisplay extends BaseGameState {
     MainWebSocketProcessService mainWebSocketProcessService;
 
     public StatePlayerListDisplay() {
-        super(GameState.PlayerListDisplay);
+        super(new GameStateSettings(
+                "ST05",
+                GameState.PlayerListDisplay,
+                5000,
+                GameState.Empty,
+                GameState.RoleAssignment));
     }
 
     @Override
@@ -21,7 +26,7 @@ public class StatePlayerListDisplay extends BaseGameState {
 
     @Override
     public void runEndTask() {
-        this.mainWebSocketProcessService.gameScreenChange(GameState.RoleAssignment);
+        this.mainWebSocketProcessService.gameScreenChange(this.getNexGameState());
     }
 
 }

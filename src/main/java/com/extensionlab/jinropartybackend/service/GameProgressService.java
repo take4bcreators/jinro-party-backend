@@ -1,5 +1,7 @@
 package com.extensionlab.jinropartybackend.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,38 +27,22 @@ public class GameProgressService {
     StateDayPhaseStart stateDayPhaseStart;
 
     public void startStateTask(GameState gameState) {
-        System.out.println("startStateTask");
-        BaseGameState baseGameState = null;
-        // @note ゲーム状態分岐場所
-        switch (gameState) {
-            case PlayerListDisplay:
-                baseGameState = statePlayerListDisplay;
-                break;
-            case RoleAssignment:
-                baseGameState = stateRoleAssignment;
-                break;
-            case DayPhaseStart:
-                baseGameState = stateDayPhaseStart;
-                break;
-            default:
-                System.out.println("warning: gameState is other");
-                break;
-        }
-        if (baseGameState == null) {
+        Optional<BaseGameState> gameStateObject = this.getThisGameStateObject(gameState);
+        if (gameStateObject.isEmpty()) {
             return;
         }
-        this.startStateTask(baseGameState);
+        this.startStateTask(gameStateObject.get());
     }
 
-    private void startStateTask(BaseGameState baseGameState) {
-        int time = baseGameState.getGameStateTime();
+    private void startStateTask(BaseGameState gameStateObject) {
+        gameStateObject.runInitTask();
+        int time = gameStateObject.getCountdownTime();
         if (time > 0) {
             timerService.start(time, () -> {
-                baseGameState.runEndTask();
+                gameStateObject.runEndTask();
             });
         }
-        System.out.println("runStartTask");
-        baseGameState.runStartTask();
+        gameStateObject.runStartTask();
     }
 
     public void pauseTimer() {
@@ -65,6 +51,22 @@ public class GameProgressService {
 
     public void resumeTimer() {
         this.timerService.resume();
+    }
+
+    private Optional<BaseGameState> getThisGameStateObject(GameState gameState) {
+        // @note 新しく状態が追加されたらここにも追加する
+        BaseGameState[] gameStateObjects = {
+                statePlayerListDisplay,
+                stateRoleAssignment,
+                stateDayPhaseStart,
+        };
+        for (BaseGameState gameStateObject : gameStateObjects) {
+            if (gameState.equals(gameStateObject.getThisGameState())) {
+                return Optional.of(gameStateObject);
+            }
+        }
+        System.out.println("warning: gameState is other");
+        return Optional.empty();
     }
 
 }

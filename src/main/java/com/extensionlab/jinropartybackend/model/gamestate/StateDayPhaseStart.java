@@ -12,7 +12,12 @@ public class StateDayPhaseStart extends BaseGameState {
     MainWebSocketProcessService mainWebSocketProcessService;
 
     public StateDayPhaseStart() {
-        super(GameState.DayPhaseStart);
+        super(new GameStateSettings(
+                "ST07",
+                GameState.DayPhaseStart,
+                3000,
+                GameState.RoleAssignment,
+                GameState.DayPhase));
     }
 
     @Override
@@ -21,7 +26,7 @@ public class StateDayPhaseStart extends BaseGameState {
 
     @Override
     public void runEndTask() {
-        this.mainWebSocketProcessService.gameScreenChange(GameState.DayPhase);
+        this.mainWebSocketProcessService.gameScreenChange(this.getNexGameState());
     }
 
 }

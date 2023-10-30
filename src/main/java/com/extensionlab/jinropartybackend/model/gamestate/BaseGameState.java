@@ -1,24 +1,41 @@
 package com.extensionlab.jinropartybackend.model.gamestate;
 
-import com.extensionlab.jinropartybackend.common.CommonConst;
 import com.extensionlab.jinropartybackend.enums.GameState;
 
 public abstract class BaseGameState {
 
-    protected GameState gameState;
-    protected int gameStateTime;
+    protected GameStateSettings gameStateConf;
 
-    public BaseGameState(GameState gameState) {
-        this.gameState = gameState;
-        this.gameStateTime = CommonConst.GameStateTime.get(gameState);
+    public BaseGameState(GameStateSettings gameStateConf) {
+        this.gameStateConf = gameStateConf;
     }
 
-    public int getGameStateTime() {
-        return this.gameStateTime;
-    }
+    public void runInitTask() {
+    };
 
     public abstract void runStartTask();
 
     public abstract void runEndTask();
+
+    public GameState getThisGameState() {
+        return this.gameStateConf.getThisGameState();
+    }
+
+    protected void setCountdownTime(int time) {
+        this.gameStateConf.setCountdownTime(time);
+        return;
+    }
+
+    public int getCountdownTime() {
+        return this.gameStateConf.getCountdownTime();
+    }
+
+    public GameState getPrevGameState() {
+        return this.gameStateConf.getPrevGameState();
+    }
+
+    public GameState getNexGameState() {
+        return this.gameStateConf.getNexGameState();
+    }
 
 }

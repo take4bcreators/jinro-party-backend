@@ -12,7 +12,12 @@ public class StateRoleAssignment extends BaseGameState {
     MainWebSocketProcessService mainWebSocketProcessService;
 
     public StateRoleAssignment() {
-        super(GameState.RoleAssignment);
+        super(new GameStateSettings(
+                "ST06",
+                GameState.RoleAssignment,
+                0,
+                GameState.PlayerListDisplay,
+                GameState.DayPhaseStart));
     }
 
     @Override
@@ -21,7 +26,7 @@ public class StateRoleAssignment extends BaseGameState {
 
     @Override
     public void runEndTask() {
-        this.mainWebSocketProcessService.gameScreenChange(GameState.DayPhaseStart);
+        this.mainWebSocketProcessService.gameScreenChange(this.getNexGameState());
     }
 
 }
