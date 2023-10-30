@@ -4,11 +4,11 @@ import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
-public abstract class GameStateBase {
+public abstract class GameStateComponent {
 
     protected GameStateSettings gameStateConf;
 
-    public GameStateBase(GameStateSettings gameStateConf) {
+    public GameStateComponent(GameStateSettings gameStateConf) {
         this.gameStateConf = gameStateConf;
     }
 

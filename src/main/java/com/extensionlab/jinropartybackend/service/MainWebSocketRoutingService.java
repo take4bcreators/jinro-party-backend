@@ -12,7 +12,7 @@ public class MainWebSocketRoutingService {
     MainWebSocketProcessService mainWebSocketProcessService;
 
     @Autowired
-    GameProgressService gameProgressService;
+    GameTimerService gameTimerService;
 
     @Autowired
     GameStateService gameStateService;
@@ -59,11 +59,11 @@ public class MainWebSocketRoutingService {
                 // @todo
                 break;
             case CountdownTimerPause:
-                this.gameProgressService.pauseTimer();
+                this.gameTimerService.pauseTimer();
                 this.mainWebSocketProcessService.countdownTimerPause();
                 break;
             case CountdownTimerResume:
-                this.gameProgressService.resumeTimer();
+                this.gameTimerService.resumeTimer();
                 this.mainWebSocketProcessService.countdownTimerResume();
                 break;
             case ReturnCurrentGameState:

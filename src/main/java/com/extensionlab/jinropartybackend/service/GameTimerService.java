@@ -5,35 +5,36 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.extensionlab.jinropartybackend.component.gamestate.GameStateBase;
+import com.extensionlab.jinropartybackend.component.gamestate.GameStateComponent;
 import com.extensionlab.jinropartybackend.enums.GameState;
 
 @Service
-public class GameProgressService {
+public class GameTimerService {
 
     @Autowired
     CountdownTimerService timerService;
 
     @Autowired
-    GameStateUtilService gameStateUtilService;
+    GameStateRoutingService gameStateRoutingService;
 
     public void startStateTask(GameState gameState, GameStateService gameStateService) {
         System.out.println("  ---- startStateTask ---- ");
-        Optional<GameStateBase> gameStateObjectWrap = this.gameStateUtilService.getThisGameStateObject(gameState);
-        if (gameStateObjectWrap.isEmpty()) {
+        Optional<GameStateComponent> gameStateCompWrapper = this.gameStateRoutingService
+                .getThisGameStateComponent(gameState);
+        if (gameStateCompWrapper.isEmpty()) {
             return;
         }
-        GameStateBase gameStateObject = gameStateObjectWrap.get();
-        System.out.println("This Game State: " + gameStateObject.getThisGameState());
-        gameStateObject.runInitTask();
-        int time = gameStateObject.getCountdownTime();
+        GameStateComponent gameStateComponent = gameStateCompWrapper.get();
+        System.out.println("This Game State: " + gameStateComponent.getThisGameState());
+        gameStateComponent.runInitTask();
+        int time = gameStateComponent.getCountdownTime();
         System.out.println("Time: " + time);
         if (time > 0) {
             timerService.start(time, () -> {
-                gameStateObject.runEndTask(gameStateService);
+                gameStateComponent.runEndTask(gameStateService);
             });
         }
-        gameStateObject.runStartTask();
+        gameStateComponent.runStartTask();
     }
 
     public void pauseTimer() {

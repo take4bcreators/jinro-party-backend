@@ -8,12 +8,12 @@ import com.extensionlab.jinropartybackend.service.GameStateService;
 import com.extensionlab.jinropartybackend.service.PlayerInfoService;
 
 @Component
-public class StateDayPhase extends GameStateBase {
+public class DayPhaseComponent extends GameStateComponent {
 
     @Autowired
     PlayerInfoService playerInfoService;
 
-    public StateDayPhase() {
+    public DayPhaseComponent() {
         super(new GameStateSettings(
                 "ST08",
                 GameState.DayPhase,

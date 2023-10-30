@@ -6,9 +6,9 @@ import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
-public class StateDayPhaseStart extends GameStateBase {
+public class DayPhaseStartComponent extends GameStateComponent {
 
-    public StateDayPhaseStart() {
+    public DayPhaseStartComponent() {
         super(new GameStateSettings(
                 "ST07",
                 GameState.DayPhaseStart,

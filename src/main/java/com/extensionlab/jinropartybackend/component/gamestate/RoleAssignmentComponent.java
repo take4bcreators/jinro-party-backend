@@ -6,9 +6,9 @@ import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
-public class StateRoleAssignment extends GameStateBase {
+public class RoleAssignmentComponent extends GameStateComponent {
 
-    public StateRoleAssignment() {
+    public RoleAssignmentComponent() {
         super(new GameStateSettings(
                 "ST06",
                 GameState.RoleAssignment,

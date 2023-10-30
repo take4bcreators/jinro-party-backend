@@ -15,7 +15,7 @@ public class GameStateService {
     MainWebSocketProcessService mainWebSocketProcessService;
 
     @Autowired
-    GameProgressService gameProgressService;
+    GameTimerService gameTimerService;
 
     /**
      * ゲーム状態変更タスク実行
@@ -25,7 +25,7 @@ public class GameStateService {
     public void execChangeStateTask(GameState gameState) {
         this.gameDataService.updateGameState(gameState);
         this.mainWebSocketProcessService.gameScreenChange(gameState);
-        this.gameProgressService.startStateTask(gameState, this);
+        this.gameTimerService.startStateTask(gameState, this);
     }
 
 }
