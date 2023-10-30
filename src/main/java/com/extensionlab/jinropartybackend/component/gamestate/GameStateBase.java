@@ -1,12 +1,13 @@
-package com.extensionlab.jinropartybackend.model.gamestate;
+package com.extensionlab.jinropartybackend.component.gamestate;
 
 import com.extensionlab.jinropartybackend.enums.GameState;
+import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
 
-public abstract class BaseGameState {
+public abstract class GameStateBase {
 
     protected GameStateSettings gameStateConf;
 
-    public BaseGameState(GameStateSettings gameStateConf) {
+    public GameStateBase(GameStateSettings gameStateConf) {
         this.gameStateConf = gameStateConf;
     }
 
