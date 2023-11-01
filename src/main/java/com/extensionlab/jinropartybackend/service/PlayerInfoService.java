@@ -2,7 +2,8 @@ package com.extensionlab.jinropartybackend.service;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Arrays;
+// import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -196,29 +197,14 @@ public class PlayerInfoService {
     }
 
     /**
-     * 全プレイヤーデータ配列取得
-     * 
-     * @return 全プレイヤーデータ配列
-     */
-    public PlayerInfo[] getAllPlayerData() {
-        var gameDataId = "gd00001";
-        Optional<PlayerInfo[]> record = this.repository.findAllByGameDataId(gameDataId);
-        if (record.isEmpty()) {
-            PlayerInfo[] rtn = {};
-            return rtn;
-        }
-        return record.get();
-    }
-
-    /**
      * 全プレイヤーデータリスト取得
      * 
      * @return 全プレイヤーデータリスト
      */
-    public ArrayList<PlayerInfo> getAllPlayerDataToList() {
-        PlayerInfo[] allPlayerData = getAllPlayerData();
-        var allPlayerDataList = new ArrayList<PlayerInfo>(Arrays.asList(allPlayerData));
-        return allPlayerDataList;
+    public List<PlayerInfo> getAllPlayerData() {
+        var gameDataId = "gd00001";
+        List<PlayerInfo> allPlayerData = this.repository.findByGameDataId(gameDataId);
+        return allPlayerData;
     }
 
     /**
@@ -227,7 +213,7 @@ public class PlayerInfoService {
      * @return 全プレイヤーデータAPI用リスト
      */
     public ArrayList<APIReplyPlayerData> getAllPlayerDataToListForAPI() {
-        ArrayList<PlayerInfo> allPlayerData = this.getAllPlayerDataToList();
+        List<PlayerInfo> allPlayerData = this.getAllPlayerData();
         var allPlayerDataForAPI = new ArrayList<APIReplyPlayerData>();
         for (PlayerInfo playerData : allPlayerData) {
             var playerDataForAPI = new APIReplyPlayerData(
@@ -281,5 +267,35 @@ public class PlayerInfoService {
         long allCount = this.repository.countByGameDataIdAndPlayerState(gameDataId, PlayerState.Alive);
         int allCountInt = Math.toIntExact(allCount);
         return allCountInt;
+    }
+
+    /**
+     * プレイヤーデータ取得
+     * 
+     * @param deviceId
+     *            デバイスID
+     * @return プレイヤーデータ
+     */
+    public APIReplyPlayerData getPlayerDataForAPI(String deviceId) {
+        var gameDataId = "gd00001";
+        Optional<PlayerInfo> record = this.repository.findById(new PlayerInfoPK(gameDataId, deviceId));
+        if (record.isEmpty()) {
+            return new APIReplyPlayerData(
+                    "",
+                    "",
+                    "",
+                    PlayerRole.Empty,
+                    PlayerTeam.Empty,
+                    PlayerState.Empty);
+        }
+        PlayerInfo playerInfo = record.get();
+        var apiReplyPlayerData = new APIReplyPlayerData(
+                playerInfo.getDeviceId(),
+                playerInfo.getPlayerName(),
+                playerInfo.getPlayerIcon(),
+                playerInfo.getPlayerRole(),
+                playerInfo.getPlayerTeam(),
+                playerInfo.getPlayerState());
+        return apiReplyPlayerData;
     }
 }

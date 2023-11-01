@@ -1,6 +1,6 @@
 package com.extensionlab.jinropartybackend.repository;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,12 +12,12 @@ public interface PlayerInfoRepository extends JpaRepository<PlayerInfo, PlayerIn
 
     void deleteByGameDataId(String gameDataId);
 
-    Optional<PlayerInfo[]> findAllByGameDataId(String gameDataId);
-
     long countByGameDataId(String gameDataId);
 
     long countByGameDataIdAndSelfRoleCheck(String gameDataId, boolean b);
 
     long countByGameDataIdAndPlayerState(String gameDataId, PlayerState alive);
+
+    List<PlayerInfo> findByGameDataId(String gameDataId);
 
 }
