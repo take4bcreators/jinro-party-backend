@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class APIAllPlayerInfo {
+public class APIReplyPlayerData {
     /** デバイスID */
     private String deviceId;
     /** プレイヤー名 */

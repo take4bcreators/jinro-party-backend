@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerState;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
-import com.extensionlab.jinropartybackend.model.api.APIAllPlayerInfo;
+import com.extensionlab.jinropartybackend.model.api.APIReplyPlayerData;
 import com.extensionlab.jinropartybackend.model.entity.EntryPlayerInfo;
 import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
 import com.extensionlab.jinropartybackend.model.entity.PlayerInfoPK;
@@ -200,7 +200,7 @@ public class PlayerInfoService {
      * 
      * @return 全プレイヤーデータ配列
      */
-    public PlayerInfo[] getAllPlayerInfo() {
+    public PlayerInfo[] getAllPlayerData() {
         var gameDataId = "gd00001";
         Optional<PlayerInfo[]> record = this.repository.findAllByGameDataId(gameDataId);
         if (record.isEmpty()) {
@@ -215,10 +215,10 @@ public class PlayerInfoService {
      * 
      * @return 全プレイヤーデータリスト
      */
-    public ArrayList<PlayerInfo> getAllPlayerInfoToList() {
-        PlayerInfo[] allPlayerInfos = getAllPlayerInfo();
-        var allPlayerInfoList = new ArrayList<PlayerInfo>(Arrays.asList(allPlayerInfos));
-        return allPlayerInfoList;
+    public ArrayList<PlayerInfo> getAllPlayerDataToList() {
+        PlayerInfo[] allPlayerData = getAllPlayerData();
+        var allPlayerDataList = new ArrayList<PlayerInfo>(Arrays.asList(allPlayerData));
+        return allPlayerDataList;
     }
 
     /**
@@ -226,20 +226,20 @@ public class PlayerInfoService {
      * 
      * @return 全プレイヤーデータAPI用リスト
      */
-    public ArrayList<APIAllPlayerInfo> getAllPlayerInfoToListForAPI() {
-        ArrayList<PlayerInfo> getAllPlayerInfoToList = this.getAllPlayerInfoToList();
-        var apiAllPlayerInfos = new ArrayList<APIAllPlayerInfo>();
-        for (PlayerInfo playerInfo : getAllPlayerInfoToList) {
-            var apiAllPlayerInfo = new APIAllPlayerInfo(
-                    playerInfo.getDeviceId(),
-                    playerInfo.getPlayerName(),
-                    playerInfo.getPlayerIcon(),
-                    playerInfo.getPlayerRole(),
-                    playerInfo.getPlayerTeam(),
-                    playerInfo.getPlayerState());
-            apiAllPlayerInfos.add(apiAllPlayerInfo);
+    public ArrayList<APIReplyPlayerData> getAllPlayerDataToListForAPI() {
+        ArrayList<PlayerInfo> allPlayerData = this.getAllPlayerDataToList();
+        var allPlayerDataForAPI = new ArrayList<APIReplyPlayerData>();
+        for (PlayerInfo playerData : allPlayerData) {
+            var playerDataForAPI = new APIReplyPlayerData(
+                    playerData.getDeviceId(),
+                    playerData.getPlayerName(),
+                    playerData.getPlayerIcon(),
+                    playerData.getPlayerRole(),
+                    playerData.getPlayerTeam(),
+                    playerData.getPlayerState());
+            allPlayerDataForAPI.add(playerDataForAPI);
         }
-        return apiAllPlayerInfos;
+        return allPlayerDataForAPI;
     }
 
     /**
