@@ -33,7 +33,7 @@ public class MainWebSocketRoutingService {
             case MonitorSite:
             case PlayerSite:
             case Player:
-                this.mainWebSocketProcessService.sendMessageAll(receiveText);
+                this.mainWebSocketProcessService.sendJSONTextAll(receiveText);
                 isReturn = true;
                 break;
             case None:

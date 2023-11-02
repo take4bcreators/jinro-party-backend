@@ -41,9 +41,9 @@ public class MainWebSocketProcessService {
         return gameState;
     }
 
-    public void sendMessageAll(String sendText) {
+    public void sendJSONTextAll(String sendJSONText) {
         try {
-            this.generalWebSocketService.sendMessageAll(WebSocketGroup.Main, sendText);
+            this.generalWebSocketService.sendMessageAll(WebSocketGroup.Main, sendJSONText);
         } catch (IOException e) {
             System.err.println("WebSocket送信時にエラーが発生しました");
             e.printStackTrace();
@@ -61,7 +61,7 @@ public class MainWebSocketProcessService {
                 "",
                 "");
         String sendDataJSON = this.convertWsDataToJson(sendData);
-        this.sendMessageAll(sendDataJSON);
+        this.sendJSONTextAll(sendDataJSON);
     }
 
     public void returnCurrentGameState(APIWsData receiveData) {
@@ -91,7 +91,7 @@ public class MainWebSocketProcessService {
                 "",
                 "");
         String returnJson = this.convertWsDataToJson(returnData);
-        this.sendMessageAll(returnJson);
+        this.sendJSONTextAll(returnJson);
     }
 
     public GameState extractGameState(APIWsData apiWsData) {
@@ -100,7 +100,16 @@ public class MainWebSocketProcessService {
         return gameState;
     }
 
-    private void sendAllSite(WsRequestAction action, String param01, String param02, String param03) {
+    public void sendAllSite(WsRequestAction action, String param01, String param02, String param03) {
+        if (param01 == null) {
+            param01 = "";
+        }
+        if (param02 == null) {
+            param02 = "";
+        }
+        if (param03 == null) {
+            param03 = "";
+        }
         APIWsData returnData = new APIWsData(
                 WsDestinationType.AllSite,
                 "",
@@ -111,11 +120,24 @@ public class MainWebSocketProcessService {
                 param02,
                 param03);
         String returnJson = this.convertWsDataToJson(returnData);
-        this.sendMessageAll(returnJson);
+        this.sendJSONTextAll(returnJson);
     }
 
-    private void sendAllSite(WsRequestAction action) {
+    public void sendAllSite(WsRequestAction action, String param01, String param02) {
+        this.sendAllSite(action, param01, param02, "");
+    }
+
+    public void sendAllSite(WsRequestAction action, String param01) {
+        this.sendAllSite(action, param01, "", "");
+    }
+
+    public void sendAllSite(WsRequestAction action) {
         this.sendAllSite(action, "", "", "");
+    }
+
+    public void countdownTimerStart(int time) {
+        String timeText = String.valueOf(time);
+        this.sendAllSite(WsRequestAction.CountdownTimerStart, timeText);
     }
 
     public void countdownTimerPause() {

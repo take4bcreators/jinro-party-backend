@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
 import com.extensionlab.jinropartybackend.service.GameStateService;
+import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
 import com.extensionlab.jinropartybackend.service.PlayerInfoService;
 
 @Component
@@ -12,6 +13,9 @@ public class DayPhaseComponent extends GameStateComponent {
 
     @Autowired
     PlayerInfoService playerInfoService;
+
+    @Autowired
+    MainWebSocketProcessService mainWebSocketProcessService;
 
     public DayPhaseComponent() {
         super(new GameStateSettings(
@@ -30,6 +34,7 @@ public class DayPhaseComponent extends GameStateComponent {
 
     @Override
     public void runStartTask() {
+        this.mainWebSocketProcessService.countdownTimerStart(this.getCountdownTime());
     }
 
     @Override
