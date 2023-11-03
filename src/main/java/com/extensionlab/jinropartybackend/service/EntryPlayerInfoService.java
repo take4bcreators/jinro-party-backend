@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.enums.EntryPlayerState;
 import com.extensionlab.jinropartybackend.model.entity.EntryPlayerInfo;
-import com.extensionlab.jinropartybackend.model.entity.EntryPlayerInfoPK;
+// import com.extensionlab.jinropartybackend.model.entity.EntryPlayerInfoPK;
 import com.extensionlab.jinropartybackend.repository.EntryPlayerInfoRepository;
 
 import jakarta.transaction.Transactional;
@@ -97,7 +97,8 @@ public class EntryPlayerInfoService {
     @Transactional
     public void deleteByDeviceId(String deviceId) {
         var gameDataId = "gd00001";
-        this.repository.deleteById(new EntryPlayerInfoPK(gameDataId, deviceId));
+        // this.repository.deleteById(new EntryPlayerInfoPK(gameDataId, deviceId));
+        this.repository.deleteByGameDataIdAndDeviceId(gameDataId, deviceId);
         return;
     }
 

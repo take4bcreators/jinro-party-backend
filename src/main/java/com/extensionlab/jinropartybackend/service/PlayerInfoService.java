@@ -14,7 +14,7 @@ import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import com.extensionlab.jinropartybackend.model.api.APIReplyPlayerData;
 import com.extensionlab.jinropartybackend.model.entity.EntryPlayerInfo;
 import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
-import com.extensionlab.jinropartybackend.model.entity.PlayerInfoPK;
+// import com.extensionlab.jinropartybackend.model.entity.PlayerInfoPK;
 import com.extensionlab.jinropartybackend.repository.PlayerInfoRepository;
 import jakarta.transaction.Transactional;
 
@@ -101,7 +101,9 @@ public class PlayerInfoService {
      */
     public PlayerInfo getPlayerInfo(String deviceId) {
         String gameDataId = "gd00001";
-        Optional<PlayerInfo> record = this.repository.findById(new PlayerInfoPK(gameDataId, deviceId));
+        // Optional<PlayerInfo> record = this.repository.findById(new
+        // PlayerInfoPK(gameDataId, deviceId));
+        Optional<PlayerInfo> record = this.repository.findByGameDataIdAndDeviceId(gameDataId, deviceId);
         return record.get();
     }
 
@@ -114,7 +116,9 @@ public class PlayerInfoService {
      */
     public boolean existsDeviceId(String deviceId) {
         String gameDataId = "gd00001";
-        Optional<PlayerInfo> record = this.repository.findById(new PlayerInfoPK(gameDataId, deviceId));
+        // Optional<PlayerInfo> record = this.repository.findById(new
+        // PlayerInfoPK(gameDataId, deviceId));
+        Optional<PlayerInfo> record = this.repository.findByGameDataIdAndDeviceId(gameDataId, deviceId);
         if (record.isEmpty()) {
             return false;
         }
@@ -186,7 +190,9 @@ public class PlayerInfoService {
      */
     public boolean checkPlayerAlive(String deviceId) {
         String gameDataId = "gd00001";
-        Optional<PlayerInfo> record = this.repository.findById(new PlayerInfoPK(gameDataId, deviceId));
+        // Optional<PlayerInfo> record = this.repository.findById(new
+        // PlayerInfoPK(gameDataId, deviceId));
+        Optional<PlayerInfo> record = this.repository.findByGameDataIdAndDeviceId(gameDataId, deviceId);
         if (record.isEmpty()) {
             return false;
         }
@@ -278,7 +284,9 @@ public class PlayerInfoService {
      */
     public APIReplyPlayerData getPlayerDataForAPI(String deviceId) {
         var gameDataId = "gd00001";
-        Optional<PlayerInfo> record = this.repository.findById(new PlayerInfoPK(gameDataId, deviceId));
+        // Optional<PlayerInfo> record = this.repository.findById(new
+        // PlayerInfoPK(gameDataId, deviceId));
+        Optional<PlayerInfo> record = this.repository.findByGameDataIdAndDeviceId(gameDataId, deviceId);
         if (record.isEmpty()) {
             return new APIReplyPlayerData(
                     "",
