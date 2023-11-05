@@ -6,15 +6,15 @@ import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
-public class DayPhaseEndComponent extends GameStateComponent {
+public class RoleRevealComponent extends GameStateComponent {
 
-    public DayPhaseEndComponent() {
+    public RoleRevealComponent() {
         super(new GameStateSettings(
-                "ST09",
-                GameState.DayPhaseEnd,
-                3000,
-                GameState.DayPhase,
-                GameState.Voting));
+                "ST22",
+                GameState.RoleReveal,
+                0,
+                GameState.FinalResult,
+                GameState.Empty));
     }
 
     @Override
@@ -23,8 +23,6 @@ public class DayPhaseEndComponent extends GameStateComponent {
 
     @Override
     public void runEndTask(GameStateService gameStateService) {
-        // @note for DEBUG
-        // gameStateService.execChangeStateTask(this.getNexGameState());
     }
 
 }

@@ -12,7 +12,7 @@ public class DayPhaseStartComponent extends GameStateComponent {
         super(new GameStateSettings(
                 "ST07",
                 GameState.DayPhaseStart,
-                5000,
+                3000,
                 GameState.RoleAssignment,
                 GameState.DayPhase));
     }
