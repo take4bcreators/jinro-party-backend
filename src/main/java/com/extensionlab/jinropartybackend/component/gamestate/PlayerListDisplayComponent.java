@@ -1,12 +1,17 @@
 package com.extensionlab.jinropartybackend.component.gamestate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
+import com.extensionlab.jinropartybackend.service.GameProgressUtilService;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
 public class PlayerListDisplayComponent extends GameStateComponent {
+
+    @Autowired
+    GameProgressUtilService gameProgressUtilService;
 
     public PlayerListDisplayComponent() {
         super(new GameStateSettings(
@@ -19,6 +24,7 @@ public class PlayerListDisplayComponent extends GameStateComponent {
 
     @Override
     public void runStartTask() {
+        gameProgressUtilService.assignPlayerRoleAndTeam();
     }
 
     @Override

@@ -51,7 +51,7 @@ public class PlayerInfoService {
      * @param playerInfoList
      */
     @Transactional
-    public void registryPlayerInfoList(ArrayList<PlayerInfo> playerInfoList) {
+    public void registryPlayerInfoList(List<PlayerInfo> playerInfoList) {
         this.repository.saveAll(playerInfoList);
         return;
     }
