@@ -30,4 +30,6 @@ public interface PlayerInfoRepository extends JpaRepository<PlayerInfo, String> 
 
     Optional<PlayerInfo> findByGameDataIdAndDeviceId(String gameDataId, String deviceId);
 
+    List<PlayerInfo> findByGameDataIdAndPlayerState(String gameDataId, PlayerState playerState);
+
 }

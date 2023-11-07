@@ -12,12 +12,19 @@ import org.springframework.stereotype.Service;
 import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
+import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
 
 @Service
 public class GameProgressUtilService {
 
     @Autowired
     PlayerInfoService playerInfoService;
+
+    @Autowired
+    VotesService votesService;
+
+    @Autowired
+    VoteReceiversService voteReceiversService;
 
     public void assignPlayerRoleAndTeam() {
         List<PlayerInfo> playerList = this.playerInfoService.getAllPlayerData();
@@ -132,6 +139,57 @@ public class GameProgressUtilService {
     public <T> List<T> getSubList(List<T> list, int fromIndex, int toIndex) {
         List<T> subList = new ArrayList<>(list.subList(fromIndex, toIndex));
         return subList;
+    }
+
+    public void prepareVoteTables() {
+        // 投票テーブルの既存データ削除
+        votesService.deleteAll();
+
+        // 投票対象プレイヤーテーブルの既存データ削除
+        voteReceiversService.deleteAll();
+
+        // 生存プレイヤーの情報を取得
+        List<PlayerInfo> alivePlayers = playerInfoService.getAllAlivePlayerData();
+
+        // 生存プレイヤーの情報から投票対象テーブル用データの作成
+        List<VoteReceivers> voteReceiversList = new ArrayList<>();
+        for (PlayerInfo playerInfo : alivePlayers) {
+            var voteReceivers = new VoteReceivers(
+                    playerInfo.getGameDataId(),
+                    playerInfo.getDeviceId(),
+                    playerInfo.getPlayerName(),
+                    playerInfo.getPlayerIcon());
+            voteReceiversList.add(voteReceivers);
+        }
+
+        // 投票対象テーブルデータ挿入
+        voteReceiversService.registryFromList(voteReceiversList);
+    }
+
+    // @remind 未着手
+    public void prepareReVoteTables() {
+        // 投票対象プレイヤーテーブルの既存データ削除
+        voteReceiversService.deleteAll();
+
+        // 対象プレイヤーの情報を取得
+        // List<PlayerInfo> alivePlayers = playerInfoService.getAllAlivePlayerData();
+
+        // 対象プレイヤーの情報から投票対象テーブル用データの作成
+        // List<VoteReceivers> voteReceiversList = new ArrayList<>();
+        // for (PlayerInfo playerInfo : alivePlayers) {
+        // var voteReceivers = new VoteReceivers(
+        // playerInfo.getGameDataId(),
+        // playerInfo.getDeviceId(),
+        // playerInfo.getPlayerName(),
+        // playerInfo.getPlayerIcon());
+        // voteReceiversList.add(voteReceivers);
+        // }
+
+        // 投票対象テーブルデータ挿入
+        // voteReceiversService.registryFromList(voteReceiversList);
+
+        // 投票テーブルの既存データ削除
+        votesService.deleteAll();
     }
 
 }

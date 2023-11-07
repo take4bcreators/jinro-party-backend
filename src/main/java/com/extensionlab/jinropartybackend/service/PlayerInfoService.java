@@ -306,4 +306,16 @@ public class PlayerInfoService {
                 playerInfo.getPlayerState());
         return apiReplyPlayerData;
     }
+
+    /**
+     * 全プレイヤーデータリスト取得
+     * 
+     * @return 全プレイヤーデータリスト
+     */
+    public List<PlayerInfo> getAllAlivePlayerData() {
+        var gameDataId = "gd00001";
+        var playerState = PlayerState.Alive;
+        List<PlayerInfo> allAlivePlayerData = this.repository.findByGameDataIdAndPlayerState(gameDataId, playerState);
+        return allAlivePlayerData;
+    }
 }
