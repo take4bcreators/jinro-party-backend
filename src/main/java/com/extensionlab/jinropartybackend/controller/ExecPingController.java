@@ -10,7 +10,7 @@ import com.extensionlab.jinropartybackend.service.EntryPlayerInfoService;
 
 @RestController
 @CrossOrigin
-public class ExecPing {
+public class ExecPingController {
 
     @Autowired
     EntryPlayerInfoService service;

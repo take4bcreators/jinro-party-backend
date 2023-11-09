@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class APIReplyAllPlayerData {
+public class APIReplyAllVotePlayerData {
     /** 全プレイヤーデータ */
-    private List<APIReplyPlayerData> allPlayerData;
+    private List<APIReplyVotePlayerData> allVotePlayerData;
 }

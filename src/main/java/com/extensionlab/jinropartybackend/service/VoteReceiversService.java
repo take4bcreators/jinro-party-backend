@@ -34,4 +34,11 @@ public class VoteReceiversService {
         this.repository.saveAll(voteReceiversList);
         return;
     }
+
+    public List<VoteReceivers> getAllVoteReceiversList() {
+        var gameDataId = "gd00001";
+        List<VoteReceivers> voteReceiversList = this.repository.findAllByGameDataId(gameDataId);
+        return voteReceiversList;
+    }
+
 }

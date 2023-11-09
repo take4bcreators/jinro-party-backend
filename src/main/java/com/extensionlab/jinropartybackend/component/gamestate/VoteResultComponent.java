@@ -1,12 +1,17 @@
 package com.extensionlab.jinropartybackend.component.gamestate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
+import com.extensionlab.jinropartybackend.service.GameProgressUtilService;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
 public class VoteResultComponent extends GameStateComponent {
+
+    @Autowired
+    GameProgressUtilService gameProgressUtilService;
 
     public VoteResultComponent() {
         super(new GameStateSettings(
@@ -23,7 +28,13 @@ public class VoteResultComponent extends GameStateComponent {
 
     @Override
     public void runEndTask(GameStateService gameStateService) {
-        gameStateService.execChangeStateTask(this.getNexGameState());
+        if (!this.gameProgressUtilService.isNeedRunoffVote()) {
+            // 決選投票が不要な場合は次のシーンへ
+            gameStateService.execChangeStateTask(this.getNexGameState());
+            return;
+        }
+        // @remind ここに 2回目 はランダムに選ぶ処理を入れる
+        gameStateService.execChangeStateTask(GameState.Voting);
     }
 
 }

@@ -1,9 +1,11 @@
 package com.extensionlab.jinropartybackend.service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
 import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
+import com.extensionlab.jinropartybackend.model.entity.Votes;
 
 @Service
 public class GameProgressUtilService {
@@ -124,23 +127,32 @@ public class GameProgressUtilService {
         return citizenList;
     }
 
-    public <T> List<T> getConcatList(List<T> listA, List<T> listB) {
+    private <T> List<T> getConcatList(List<T> listA, List<T> listB) {
         List<T> immutableConcatList = Stream.concat(listA.stream(), listB.stream()).toList();
         List<T> mutableConcatList = new ArrayList<>(immutableConcatList);
         return mutableConcatList;
     }
 
-    public <T> List<T> getShuffleList(List<T> list) {
+    private <T> List<T> getShuffleList(List<T> list) {
         List<T> copyList = new ArrayList<>(list);
         Collections.shuffle(copyList);
         return copyList;
     }
 
-    public <T> List<T> getSubList(List<T> list, int fromIndex, int toIndex) {
+    private <T> T getRandomElement(List<T> list) {
+        Random random = new Random();
+        int randomIndex = random.nextInt(list.size());
+        return list.get(randomIndex);
+    }
+
+    private <T> List<T> getSubList(List<T> list, int fromIndex, int toIndex) {
         List<T> subList = new ArrayList<>(list.subList(fromIndex, toIndex));
         return subList;
     }
 
+    /**
+     * 投票用テーブル準備 (通常用)
+     */
     public void prepareVoteTables() {
         // 投票テーブルの既存データ削除
         votesService.deleteAll();
@@ -166,30 +178,114 @@ public class GameProgressUtilService {
         voteReceiversService.registryFromList(voteReceiversList);
     }
 
-    // @remind 未着手
+    /**
+     * 投票用テーブル準備 (決選投票用)
+     */
     public void prepareReVoteTables() {
         // 投票対象プレイヤーテーブルの既存データ削除
         voteReceiversService.deleteAll();
 
         // 対象プレイヤーの情報を取得
-        // List<PlayerInfo> alivePlayers = playerInfoService.getAllAlivePlayerData();
-
-        // 対象プレイヤーの情報から投票対象テーブル用データの作成
-        // List<VoteReceivers> voteReceiversList = new ArrayList<>();
-        // for (PlayerInfo playerInfo : alivePlayers) {
-        // var voteReceivers = new VoteReceivers(
-        // playerInfo.getGameDataId(),
-        // playerInfo.getDeviceId(),
-        // playerInfo.getPlayerName(),
-        // playerInfo.getPlayerIcon());
-        // voteReceiversList.add(voteReceivers);
-        // }
+        List<VoteReceivers> maxCountPlayers = votesService.getMaxCountReceivers();
 
         // 投票対象テーブルデータ挿入
-        // voteReceiversService.registryFromList(voteReceiversList);
+        voteReceiversService.registryFromList(maxCountPlayers);
 
         // 投票テーブルの既存データ削除
         votesService.deleteAll();
     }
 
+    /**
+     * 未投票プレイヤーへの対応処理
+     */
+    public void processUnvotedPlayers() {
+        // 未投票プレイヤーリスト取得
+        List<PlayerInfo> unvotedPlayerList = this.getUnvotedPlayerList();
+        if (unvotedPlayerList.size() == 0) {
+            return;
+        }
+
+        // 生存プレイヤーのリストを取得
+        List<PlayerInfo> alivePlayers = playerInfoService.getAllAlivePlayerData();
+
+        // 投票データ作成（投票先プレイヤーはランダム）
+        List<Votes> newVoteList = new ArrayList<>();
+        for (PlayerInfo unvotedPlayer : unvotedPlayerList) {
+            List<PlayerInfo> nonSelfPlayersList = alivePlayers
+                    .stream()
+                    .filter(e -> !e.getPlayerName().equals(unvotedPlayer.getPlayerName()))
+                    .collect(Collectors.toList());
+            PlayerInfo randomPlayer = this.getRandomElement(nonSelfPlayersList);
+            newVoteList.add(new Votes(
+                    unvotedPlayer.getGameDataId(),
+                    unvotedPlayer.getDeviceId(),
+                    unvotedPlayer.getPlayerName(),
+                    unvotedPlayer.getPlayerIcon(),
+                    randomPlayer.getDeviceId(),
+                    randomPlayer.getPlayerName(),
+                    randomPlayer.getPlayerIcon()));
+        }
+
+        // DBへ保存
+        this.votesService.registryVotesList(newVoteList);
+    }
+
+    private List<PlayerInfo> getUnvotedPlayerList() {
+        // 生存プレイヤーの情報を取得
+        List<PlayerInfo> alivePlayers = this.playerInfoService.getAllAlivePlayerData();
+        List<String> allPlayerDeviceIdList = alivePlayers
+                .stream()
+                .map(e -> e.getDeviceId())
+                .collect(Collectors.toList());
+
+        // 投票済みプレイヤーリスト取得
+        List<Votes> allVoteList = this.votesService.getAllVoteList();
+        List<String> allVoterDeviceIdList = allVoteList
+                .stream()
+                .map(e -> e.getVoterDeviceId())
+                .collect(Collectors.toList());
+
+        // 差分リスト（プレイヤー名のみ）取得
+        List<String> minusPlayerNameList = this.getMinusList(allPlayerDeviceIdList, allVoterDeviceIdList);
+
+        // 差分がなければサイズが 0 のリストを返す
+        if (minusPlayerNameList.size() == 0) {
+            return new ArrayList<PlayerInfo>();
+        }
+
+        // 差分リスト（名前以外含む）取得
+        List<PlayerInfo> minusPlayerList = alivePlayers
+                .stream()
+                .filter(e -> minusPlayerNameList.contains(e.getPlayerName()))
+                .collect(Collectors.toList());
+
+        return minusPlayerList;
+    }
+
+    /**
+     * 差分リスト取得
+     * 
+     * @param <T>
+     * @param firstList
+     * @param secondList
+     * @return
+     */
+    private <T> List<T> getMinusList(List<T> firstList, List<T> secondList) {
+        List<T> minusList = firstList.stream().filter(e -> !secondList.contains(e)).collect(Collectors.toList());
+        return minusList;
+    }
+
+    /**
+     * 決選投票判定処理
+     * 
+     * @return 判定結果
+     */
+    public boolean isNeedRunoffVote() {
+        // 対象プレイヤーの情報を取得
+        List<VoteReceivers> maxCountPlayers = votesService.getMaxCountReceivers();
+        if (maxCountPlayers.size() >= 2) {
+            return true;
+        }
+        return false;
+    }
 }

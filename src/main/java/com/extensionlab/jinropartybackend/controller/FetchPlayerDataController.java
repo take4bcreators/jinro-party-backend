@@ -12,7 +12,7 @@ import com.extensionlab.jinropartybackend.service.PlayerInfoService;
 
 @RestController
 @CrossOrigin
-public class FetchPlayerData {
+public class FetchPlayerDataController {
 
     @Autowired
     PlayerInfoService service;

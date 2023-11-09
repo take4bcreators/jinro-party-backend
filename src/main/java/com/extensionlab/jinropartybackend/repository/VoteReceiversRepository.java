@@ -1,5 +1,7 @@
 package com.extensionlab.jinropartybackend.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 // import com.extensionlab.jinropartybackend.model.entity.VoteReceiversPK;
 import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
@@ -14,5 +16,7 @@ public interface VoteReceiversRepository extends JpaRepository<VoteReceivers, St
     // (→ @id で指定した型を読み取っている？バグ？ or @IdClass 自体が非推奨？)
 
     void deleteByGameDataId(String gameDataId);
+
+    List<VoteReceivers> findAllByGameDataId(String gameDataId);
 
 }
