@@ -30,9 +30,7 @@ public class DayPhaseEndComponent extends GameStateComponent {
     public void runEndTask(GameStateService gameStateService) {
         // 投票系テーブル初期化処理
         gameProgressUtilService.prepareVoteTables();
-
-        // @note for DEBUG
-        // gameStateService.execChangeStateTask(this.getNexGameState());
+        gameStateService.execChangeStateTask(this.getNexGameState());
     }
 
 }

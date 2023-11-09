@@ -30,7 +30,7 @@ public interface VotesRepository extends JpaRepository<Votes, String> {
                         receiver_player_icon,
                         COUNT(*) AS vote_count
                     FROM
-                        votes
+                        prd.votes
                     WHERE
                         game_data_id = ?1
                     GROUP BY
@@ -43,7 +43,7 @@ public interface VotesRepository extends JpaRepository<Votes, String> {
                 game_data_id AS gameDataId,
                 receiver_device_id AS deviceId,
                 receiver_player_name AS playerName,
-                receiver_player_icon AS playerIcon,
+                receiver_player_icon AS playerIcon
             FROM
                 tmp01
             WHERE
