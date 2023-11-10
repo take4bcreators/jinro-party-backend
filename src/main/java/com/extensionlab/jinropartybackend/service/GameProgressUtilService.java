@@ -256,7 +256,7 @@ public class GameProgressUtilService {
         // 差分リスト（名前以外含む）取得
         List<PlayerInfo> minusPlayerList = alivePlayers
                 .stream()
-                .filter(e -> minusPlayerNameList.contains(e.getPlayerName()))
+                .filter(e -> minusPlayerNameList.contains(e.getDeviceId()))
                 .collect(Collectors.toList());
 
         return minusPlayerList;

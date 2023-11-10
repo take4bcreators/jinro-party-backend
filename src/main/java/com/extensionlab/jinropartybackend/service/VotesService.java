@@ -1,7 +1,9 @@
 package com.extensionlab.jinropartybackend.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +33,39 @@ public class VotesService {
 
     public List<VoteReceivers> getMaxCountReceivers() {
         var gameDataId = "gd00001";
-        List<VoteReceivers> maxCountPlayers = this.repository.findMaxCountReceivers(gameDataId);
-        return maxCountPlayers;
+        List<Votes> voteList = this.repository.findAllByGameDataId(gameDataId);
+        Map<String, List<Votes>> groupingVote = voteList
+                .stream()
+                .collect(Collectors.groupingBy(Votes::getReceiverDeviceId));
+        Map<String, Integer> voteCountMap = groupingVote
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().size()));
+        Integer maxVoteCount = voteCountMap
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .get()
+                .getValue();
+        List<String> maxVotePlayerIds = voteCountMap
+                .entrySet()
+                .stream()
+                .filter(e -> e.getValue() == maxVoteCount)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        List<VoteReceivers> maxVotePlayers = voteList
+                .stream()
+                .filter(e -> maxVotePlayerIds.contains(e.getReceiverDeviceId()))
+                .map(e -> {
+                    return new VoteReceivers(
+                            e.getGameDataId(),
+                            e.getReceiverDeviceId(),
+                            e.getReceiverPlayerName(),
+                            e.getReceiverPlayerIcon());
+                })
+                .distinct()
+                .collect(Collectors.toList());
+        return maxVotePlayers;
     }
 
     public VoteReceivers getMaxCountReceiver() {

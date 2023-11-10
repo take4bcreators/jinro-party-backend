@@ -34,6 +34,9 @@ public class VoteResultComponent extends GameStateComponent {
             return;
         }
         // @remind ここに 2回目 はランダムに選ぶ処理を入れる
+
+        // 決選投票へ
+        gameProgressUtilService.prepareReVoteTables();
         gameStateService.execChangeStateTask(GameState.Voting);
     }
 
