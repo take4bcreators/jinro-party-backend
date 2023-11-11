@@ -28,7 +28,7 @@ public class GameDataServiceTest {
     void testGetGameState() {
         // Mockito.when(モック対象メソッド).thenReturn(設定する戻り値);
         Mockito.when(repository.findById("gd00001"))
-                .thenReturn(Optional.of(new GameData("gd00001", GameState.PreGame, GameMode.Normal, false)));
+                .thenReturn(Optional.of(new GameData("gd00001", GameState.PreGame, GameMode.Normal, false, 1, 1)));
 
         assertEquals(gameDataService.getGameState(), GameState.PreGame);
     }

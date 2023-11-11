@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
+import com.extensionlab.jinropartybackend.service.GameDataService;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
 
@@ -12,6 +13,9 @@ public class VotingComponent extends GameStateComponent {
 
     @Autowired
     MainWebSocketProcessService mainWebSocketProcessService;
+
+    @Autowired
+    GameDataService gameDataService;
 
     public VotingComponent() {
         super(new GameStateSettings(
@@ -25,6 +29,7 @@ public class VotingComponent extends GameStateComponent {
     @Override
     public void runStartTask() {
         this.mainWebSocketProcessService.countdownTimerStart(this.getCountdownTime());
+        this.gameDataService.incrementTurnVoteCount();
     }
 
     @Override

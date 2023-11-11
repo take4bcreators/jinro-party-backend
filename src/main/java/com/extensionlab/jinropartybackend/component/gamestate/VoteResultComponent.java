@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
+import com.extensionlab.jinropartybackend.service.GameDataService;
 import com.extensionlab.jinropartybackend.service.GameProgressService;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
@@ -12,6 +13,9 @@ public class VoteResultComponent extends GameStateComponent {
 
     @Autowired
     GameProgressService gameProgressService;
+
+    @Autowired
+    GameDataService gameDataService;
 
     public VoteResultComponent() {
         super(new GameStateSettings(
@@ -34,11 +38,16 @@ public class VoteResultComponent extends GameStateComponent {
             gameStateService.execChangeStateTask(this.getNexGameState());
             return;
         }
+        int voteCount = this.gameDataService.getTurnVoteCount();
+        int voteCountLimit = 2;
+        if (voteCount < voteCountLimit) {
+            // 1回は決選投票へ進む
+            this.gameProgressService.prepareReVoteTables();
+            gameStateService.execChangeStateTask(GameState.Voting);
+            return;
+        }
         // @remind ここに 2回目 はランダムに選ぶ処理を入れる
 
-        // 決選投票へ
-        this.gameProgressService.prepareReVoteTables();
-        gameStateService.execChangeStateTask(GameState.Voting);
     }
 
 }

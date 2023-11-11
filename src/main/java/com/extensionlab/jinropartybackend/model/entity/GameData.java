@@ -34,4 +34,10 @@ public class GameData {
     @Column(name = "is_end")
     private boolean isEnd;
 
+    @Column(name = "current_turn")
+    private int currentTurn;
+
+    @Column(name = "turn_vote_count")
+    private int turnVoteCount;
+
 }

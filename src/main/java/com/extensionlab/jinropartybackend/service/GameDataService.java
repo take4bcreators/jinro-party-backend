@@ -44,7 +44,10 @@ public class GameDataService {
             newGameData.setGameState(gameState);
         } else {
             GameMode gameMode = GameMode.Normal;
-            newGameData = new GameData(gameDataId, gameState, gameMode, false);
+            boolean initEnd = false;
+            int initCurrentTurn = 0;
+            int initTurnVoteCount = 0;
+            newGameData = new GameData(gameDataId, gameState, gameMode, initEnd, initCurrentTurn, initTurnVoteCount);
         }
         this.repository.save(newGameData);
         return;
@@ -67,7 +70,10 @@ public class GameDataService {
             newGameData.setGameMode(gameMode);
         } else {
             GameState gameState = GameState.PreGame;
-            newGameData = new GameData(gameDataId, gameState, gameMode, false);
+            boolean initEnd = false;
+            int initCurrentTurn = 0;
+            int initTurnVoteCount = 0;
+            newGameData = new GameData(gameDataId, gameState, gameMode, initEnd, initCurrentTurn, initTurnVoteCount);
         }
         this.repository.save(newGameData);
         return;
@@ -97,6 +103,72 @@ public class GameDataService {
         GameData newGameData = record.get();
         newGameData.setEnd(isEnd);
         this.repository.save(newGameData);
+    }
+
+    @Transactional
+    public void updateCurrentTurn(int turnNumber) {
+        String gameDataId = "gd00001";
+        Optional<GameData> record = this.repository.findById(gameDataId);
+        GameData newGameData = record.get();
+        newGameData.setCurrentTurn(turnNumber);
+        this.repository.save(newGameData);
+        return;
+    }
+
+    public int getCurrentTurn() {
+        String gameDataId = "gd00001";
+        Optional<GameData> record = this.repository.findById(gameDataId);
+        return record.get().getCurrentTurn();
+    }
+
+    @Transactional
+    public void incrementCurrentTurn() {
+        String gameDataId = "gd00001";
+        Optional<GameData> record = this.repository.findById(gameDataId);
+        GameData newGameData = record.get();
+        int currentTurn = newGameData.getCurrentTurn();
+        newGameData.setCurrentTurn(currentTurn + 1);
+        this.repository.save(newGameData);
+        return;
+    }
+
+    @Transactional
+    public void resetCurrentTurn() {
+        this.updateCurrentTurn(0);
+        return;
+    }
+
+    @Transactional
+    public void updateTurnVoteCount(int voteCount) {
+        String gameDataId = "gd00001";
+        Optional<GameData> record = this.repository.findById(gameDataId);
+        GameData newGameData = record.get();
+        newGameData.setTurnVoteCount(voteCount);
+        this.repository.save(newGameData);
+        return;
+    }
+
+    public int getTurnVoteCount() {
+        String gameDataId = "gd00001";
+        Optional<GameData> record = this.repository.findById(gameDataId);
+        return record.get().getTurnVoteCount();
+    }
+
+    @Transactional
+    public void incrementTurnVoteCount() {
+        String gameDataId = "gd00001";
+        Optional<GameData> record = this.repository.findById(gameDataId);
+        GameData newGameData = record.get();
+        int turnVoteCount = newGameData.getTurnVoteCount();
+        newGameData.setTurnVoteCount(turnVoteCount + 1);
+        this.repository.save(newGameData);
+        return;
+    }
+
+    @Transactional
+    public void resetTurnVoteCount() {
+        this.updateTurnVoteCount(0);
+        return;
     }
 
 }
