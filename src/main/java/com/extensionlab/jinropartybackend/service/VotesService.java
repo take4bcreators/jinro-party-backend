@@ -2,7 +2,6 @@ package com.extensionlab.jinropartybackend.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +69,8 @@ public class VotesService {
 
     public VoteReceivers getMaxCountReceiver() {
         List<VoteReceivers> maxCountPlayers = this.getMaxCountReceivers();
-        Optional<VoteReceivers> maxCountReceiver = maxCountPlayers.stream().findFirst();
-        return maxCountReceiver.get();
+        VoteReceivers maxCountReceiver = maxCountPlayers.get(0);
+        return maxCountReceiver;
     }
 
     @Transactional

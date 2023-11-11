@@ -9,7 +9,8 @@ import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerState;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import com.extensionlab.jinropartybackend.model.api.APIReplyPlayerData;
-import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
+import com.extensionlab.jinropartybackend.model.entity.DropoutPlayerData;
+import com.extensionlab.jinropartybackend.service.DropoutPlayerDataService;
 import com.extensionlab.jinropartybackend.service.VotesService;
 
 @RestController
@@ -19,13 +20,16 @@ public class FetchExilePlayerController {
     @Autowired
     VotesService service;
 
+    @Autowired
+    DropoutPlayerDataService dropoutPlayerDataService;
+
     @GetMapping("/api/get-fetch-exile-player")
     public APIReplyPlayerData get() {
-        VoteReceivers maxCountReceiver = this.service.getMaxCountReceiver();
+        DropoutPlayerData dropOutPlayer = this.dropoutPlayerDataService.getData();
         var apiReplyPlayerData = new APIReplyPlayerData(
-                maxCountReceiver.getDeviceId(),
-                maxCountReceiver.getPlayerName(),
-                maxCountReceiver.getPlayerIcon(),
+                dropOutPlayer.getDeviceId(),
+                dropOutPlayer.getPlayerName(),
+                dropOutPlayer.getPlayerIcon(),
                 PlayerRole.Empty,
                 PlayerTeam.Empty,
                 PlayerState.Alive);

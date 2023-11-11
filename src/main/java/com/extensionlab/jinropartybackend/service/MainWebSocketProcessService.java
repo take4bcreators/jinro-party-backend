@@ -135,17 +135,55 @@ public class MainWebSocketProcessService {
         this.sendAllSite(action, "", "", "");
     }
 
+    public void sendMTAndGMSite(WsRequestAction action, String param01, String param02, String param03) {
+        if (param01 == null) {
+            param01 = "";
+        }
+        if (param02 == null) {
+            param02 = "";
+        }
+        if (param03 == null) {
+            param03 = "";
+        }
+        APIWsData returnData = new APIWsData(
+                WsDestinationType.MonitorSite,
+                "",
+                WsSenderType.Server,
+                "",
+                action,
+                param01,
+                param02,
+                param03);
+        String returnJsonToMT = this.convertWsDataToJson(returnData);
+        this.sendJSONTextAll(returnJsonToMT);
+        returnData.setDestinationType(WsDestinationType.GameMasterSite);
+        String returnJsonToGM = this.convertWsDataToJson(returnData);
+        this.sendJSONTextAll(returnJsonToGM);
+    }
+
+    public void sendMTAndGMSite(WsRequestAction action, String param01, String param02) {
+        this.sendMTAndGMSite(action, param01, param02, "");
+    }
+
+    public void sendMTAndGMSite(WsRequestAction action, String param01) {
+        this.sendMTAndGMSite(action, param01, "", "");
+    }
+
+    public void sendMTAndGMSite(WsRequestAction action) {
+        this.sendMTAndGMSite(action, "", "", "");
+    }
+
     public void countdownTimerStart(int time) {
         String timeText = String.valueOf(time);
-        this.sendAllSite(WsRequestAction.CountdownTimerStart, timeText);
+        this.sendMTAndGMSite(WsRequestAction.CountdownTimerStart, timeText);
     }
 
     public void countdownTimerPause() {
-        this.sendAllSite(WsRequestAction.CountdownTimerPause);
+        this.sendMTAndGMSite(WsRequestAction.CountdownTimerPause);
     }
 
     public void countdownTimerResume() {
-        this.sendAllSite(WsRequestAction.CountdownTimerResume);
+        this.sendMTAndGMSite(WsRequestAction.CountdownTimerResume);
     }
 
 }

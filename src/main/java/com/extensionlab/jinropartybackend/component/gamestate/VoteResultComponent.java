@@ -30,13 +30,14 @@ public class VoteResultComponent extends GameStateComponent {
     public void runEndTask(GameStateService gameStateService) {
         if (!this.gameProgressUtilService.isNeedRunoffVote()) {
             // 決選投票が不要な場合は次のシーンへ
+            this.gameProgressUtilService.updateDropOutTable();
             gameStateService.execChangeStateTask(this.getNexGameState());
             return;
         }
         // @remind ここに 2回目 はランダムに選ぶ処理を入れる
 
         // 決選投票へ
-        gameProgressUtilService.prepareReVoteTables();
+        this.gameProgressUtilService.prepareReVoteTables();
         gameStateService.execChangeStateTask(GameState.Voting);
     }
 

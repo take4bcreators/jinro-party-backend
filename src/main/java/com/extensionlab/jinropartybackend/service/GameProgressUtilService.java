@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.enums.PlayerRole;
+import com.extensionlab.jinropartybackend.enums.PlayerState;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
+import com.extensionlab.jinropartybackend.model.entity.DropoutPlayerData;
 import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
 import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
 import com.extensionlab.jinropartybackend.model.entity.Votes;
@@ -28,6 +30,12 @@ public class GameProgressUtilService {
 
     @Autowired
     VoteReceiversService voteReceiversService;
+
+    @Autowired
+    DropoutPlayerDataService dropoutPlayerDataService;
+
+    @Autowired
+    DataTransferService dataTransferService;
 
     public void assignPlayerRoleAndTeam() {
         List<PlayerInfo> playerList = this.playerInfoService.getAllPlayerData();
@@ -288,4 +296,23 @@ public class GameProgressUtilService {
         }
         return false;
     }
+
+    /**
+     * 脱落対象プレイヤー情報テーブル更新処理
+     */
+    public void updateDropOutTable() {
+        VoteReceivers maxCountReceiver = this.votesService.getMaxCountReceiver();
+        DropoutPlayerData dropoutPlayerData = this.dataTransferService.toDropoutPlayerData(maxCountReceiver);
+        this.dropoutPlayerDataService.deleteAll();
+        this.dropoutPlayerDataService.registryData(dropoutPlayerData);
+    }
+
+    /**
+     * 脱落処理
+     */
+    public void updatePlayerStateForDropOutPlayer() {
+        DropoutPlayerData dropoutPlayerData = this.dropoutPlayerDataService.getData();
+        this.playerInfoService.updatePlayerState(dropoutPlayerData.getDeviceId(), PlayerState.Dead);
+    }
+
 }
