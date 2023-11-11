@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
-import com.extensionlab.jinropartybackend.service.GameProgressUtilService;
+import com.extensionlab.jinropartybackend.service.GameProgressService;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
 public class VotingEndComponent extends GameStateComponent {
 
     @Autowired
-    GameProgressUtilService gameProgressUtilService;
+    GameProgressService gameProgressService;
 
     public VotingEndComponent() {
         super(new GameStateSettings(
@@ -28,7 +28,7 @@ public class VotingEndComponent extends GameStateComponent {
 
     @Override
     public void runEndTask(GameStateService gameStateService) {
-        gameProgressUtilService.processUnvotedPlayers();
+        gameProgressService.processUnvotedPlayers();
         gameStateService.execChangeStateTask(this.getNexGameState());
     }
 

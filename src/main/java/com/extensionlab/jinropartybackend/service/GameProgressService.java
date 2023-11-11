@@ -1,12 +1,9 @@
 package com.extensionlab.jinropartybackend.service;
 
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +17,10 @@ import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
 import com.extensionlab.jinropartybackend.model.entity.Votes;
 
 @Service
-public class GameProgressUtilService {
+public class GameProgressService {
+
+    @Autowired
+    CollectionUtilService collectionUtilService;
 
     @Autowired
     PlayerInfoService playerInfoService;
@@ -61,21 +61,21 @@ public class GameProgressUtilService {
         List<PlayerRole> citizenList = this.generateCitizenList(notWerewolfCount);
 
         // 特殊役職リストと市民リストの結合
-        List<PlayerRole> roleList = this.getConcatList(specialRoleList, citizenList);
+        List<PlayerRole> roleList = this.collectionUtilService.getConcatList(specialRoleList, citizenList);
 
         // リストをシャッフル
         // このあと人狼を入れて改めてシャッフルすることになるが、
         // 一旦シャッフル→切り取りを行わないと、人狼が役職に入らない可能性がある
-        List<PlayerRole> shuffledRoleList = this.getShuffleList(roleList);
+        List<PlayerRole> shuffledRoleList = this.collectionUtilService.getShuffleList(roleList);
 
         // リストを人数分切り取る
-        List<PlayerRole> subRoleList = this.getSubList(shuffledRoleList, 0, notWerewolfCount);
+        List<PlayerRole> subRoleList = this.collectionUtilService.getSubList(shuffledRoleList, 0, notWerewolfCount);
 
         // 人狼リストとの結合
-        List<PlayerRole> allRoleList = this.getConcatList(subRoleList, werewolfList);
+        List<PlayerRole> allRoleList = this.collectionUtilService.getConcatList(subRoleList, werewolfList);
 
         // 人狼が入ったリストで改めてシャッフル
-        List<PlayerRole> allShuffledRoleList = this.getShuffleList(allRoleList);
+        List<PlayerRole> allShuffledRoleList = this.collectionUtilService.getShuffleList(allRoleList);
 
         // 役職・チームをアサイン
         for (int i = 0; i < playerCount; i++) {
@@ -133,29 +133,6 @@ public class GameProgressUtilService {
             citizenList.add(PlayerRole.Citizen);
         }
         return citizenList;
-    }
-
-    private <T> List<T> getConcatList(List<T> listA, List<T> listB) {
-        List<T> immutableConcatList = Stream.concat(listA.stream(), listB.stream()).toList();
-        List<T> mutableConcatList = new ArrayList<>(immutableConcatList);
-        return mutableConcatList;
-    }
-
-    private <T> List<T> getShuffleList(List<T> list) {
-        List<T> copyList = new ArrayList<>(list);
-        Collections.shuffle(copyList);
-        return copyList;
-    }
-
-    private <T> T getRandomElement(List<T> list) {
-        Random random = new Random();
-        int randomIndex = random.nextInt(list.size());
-        return list.get(randomIndex);
-    }
-
-    private <T> List<T> getSubList(List<T> list, int fromIndex, int toIndex) {
-        List<T> subList = new ArrayList<>(list.subList(fromIndex, toIndex));
-        return subList;
     }
 
     /**
@@ -223,7 +200,7 @@ public class GameProgressUtilService {
                     .stream()
                     .filter(e -> !e.getPlayerName().equals(unvotedPlayer.getPlayerName()))
                     .collect(Collectors.toList());
-            PlayerInfo randomPlayer = this.getRandomElement(nonSelfPlayersList);
+            PlayerInfo randomPlayer = this.collectionUtilService.getRandomElement(nonSelfPlayersList);
             newVoteList.add(new Votes(
                     unvotedPlayer.getGameDataId(),
                     unvotedPlayer.getDeviceId(),
@@ -254,7 +231,8 @@ public class GameProgressUtilService {
                 .collect(Collectors.toList());
 
         // 差分リスト（プレイヤー名のみ）取得
-        List<String> minusPlayerNameList = this.getMinusList(allPlayerDeviceIdList, allVoterDeviceIdList);
+        List<String> minusPlayerNameList = this.collectionUtilService.getMinusList(allPlayerDeviceIdList,
+                allVoterDeviceIdList);
 
         // 差分がなければサイズが 0 のリストを返す
         if (minusPlayerNameList.size() == 0) {
@@ -268,19 +246,6 @@ public class GameProgressUtilService {
                 .collect(Collectors.toList());
 
         return minusPlayerList;
-    }
-
-    /**
-     * 差分リスト取得
-     * 
-     * @param <T>
-     * @param firstList
-     * @param secondList
-     * @return
-     */
-    private <T> List<T> getMinusList(List<T> firstList, List<T> secondList) {
-        List<T> minusList = firstList.stream().filter(e -> !secondList.contains(e)).collect(Collectors.toList());
-        return minusList;
     }
 
     /**

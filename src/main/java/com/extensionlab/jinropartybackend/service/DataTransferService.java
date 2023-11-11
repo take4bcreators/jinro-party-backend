@@ -2,6 +2,7 @@ package com.extensionlab.jinropartybackend.service;
 
 import org.springframework.stereotype.Service;
 
+import com.extensionlab.jinropartybackend.model.api.APIPlayerBasicData;
 import com.extensionlab.jinropartybackend.model.common.PlayerBasic;
 import com.extensionlab.jinropartybackend.model.entity.DropoutPlayerData;
 import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
@@ -9,27 +10,34 @@ import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
 @Service
 public class DataTransferService {
 
-    public PlayerBasic toPlayerBasic(VoteReceivers voteReceivers) {
+    public PlayerBasic toPlayerBasic(VoteReceivers src) {
         return new PlayerBasic(
-                voteReceivers.getGameDataId(),
-                voteReceivers.getDeviceId(),
-                voteReceivers.getPlayerName(),
-                voteReceivers.getPlayerIcon());
+                src.getGameDataId(),
+                src.getDeviceId(),
+                src.getPlayerName(),
+                src.getPlayerIcon());
     }
 
-    public DropoutPlayerData toDropoutPlayerData(PlayerBasic playerBasic) {
+    public DropoutPlayerData toDropoutPlayerData(PlayerBasic src) {
         return new DropoutPlayerData(
-                playerBasic.getGameDataId(),
-                playerBasic.getDeviceId(),
-                playerBasic.getPlayerName(),
-                playerBasic.getPlayerIcon());
+                src.getGameDataId(),
+                src.getDeviceId(),
+                src.getPlayerName(),
+                src.getPlayerIcon());
     }
 
-    public DropoutPlayerData toDropoutPlayerData(VoteReceivers voteReceivers) {
+    public DropoutPlayerData toDropoutPlayerData(VoteReceivers src) {
         return new DropoutPlayerData(
-                voteReceivers.getGameDataId(),
-                voteReceivers.getDeviceId(),
-                voteReceivers.getPlayerName(),
-                voteReceivers.getPlayerIcon());
+                src.getGameDataId(),
+                src.getDeviceId(),
+                src.getPlayerName(),
+                src.getPlayerIcon());
+    }
+
+    public APIPlayerBasicData toAPIPlayerBasicData(DropoutPlayerData src) {
+        return new APIPlayerBasicData(
+                src.getDeviceId(),
+                src.getPlayerName(),
+                src.getPlayerIcon());
     }
 }
