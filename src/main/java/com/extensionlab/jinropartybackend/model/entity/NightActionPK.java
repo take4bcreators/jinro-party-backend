@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeerActionPK implements Serializable {
+public class NightActionPK implements Serializable {
     private String gameDataId;
-    private String seerDeviceId;
+    private String deviceId;
 }

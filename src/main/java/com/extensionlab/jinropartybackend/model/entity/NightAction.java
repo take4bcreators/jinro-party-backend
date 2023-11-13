@@ -17,17 +17,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "seer_action", schema = "prd")
-@IdClass(value = SeerActionPK.class)
-public class SeerAction {
+@Table(name = "night_action", schema = "prd")
+@IdClass(value = NightActionPK.class)
+public class NightAction {
 
     @Id
     @Column(name = "game_data_id")
     private String gameDataId;
 
     @Id
-    @Column(name = "seer_device_id")
-    private String seerDeviceId;
+    @Column(name = "device_id")
+    private String deviceId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "player_role")
+    private PlayerRole playerRole;
 
     @Column(name = "receiver_device_id")
     private String receiverDeviceId;

@@ -6,16 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.enums.PlayerRole;
-import com.extensionlab.jinropartybackend.model.entity.SeerAction;
-import com.extensionlab.jinropartybackend.repository.SeerActionRepository;
+import com.extensionlab.jinropartybackend.model.entity.NightAction;
+import com.extensionlab.jinropartybackend.repository.NightActionRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class SeerActionService {
+public class NightActionService {
 
     @Autowired
-    SeerActionRepository repository;
+    NightActionRepository repository;
 
     /**
      * 全登録データ削除
@@ -27,37 +27,38 @@ public class SeerActionService {
         return;
     }
 
-    public boolean existsRecord(String seerDeviceId) {
+    public boolean existsRecord(String deviceId) {
         var gameDataId = "gd00001";
-        boolean result = this.repository.existsByGameDataIdAndSeerDeviceId(gameDataId, seerDeviceId);
+        boolean result = this.repository.existsByGameDataIdAndDeviceId(gameDataId, deviceId);
         return result;
     }
 
-    public SeerAction findRecord(String seerDeviceId) {
+    public NightAction findRecord(String deviceId) {
         var gameDataId = "gd00001";
-        Optional<SeerAction> result = this.repository.findByGameDataIdAndSeerDeviceId(gameDataId, seerDeviceId);
+        Optional<NightAction> result = this.repository.findByGameDataIdAndDeviceId(gameDataId, deviceId);
         return result.get();
     }
 
     @Transactional
-    public void registrySeerAction(SeerAction seerAction) {
-        this.repository.save(seerAction);
+    public void registryNightAction(NightAction nightAction) {
+        this.repository.save(nightAction);
         return;
     }
 
     @Transactional
-    public void registrySeerAction(
-            String seerDeviceId, String receiverDeviceId, String receiverPlayerName,
+    public void registryNightAction(
+            String deviceId, PlayerRole playerRole, String receiverDeviceId, String receiverPlayerName,
             String receiverPlayerIcon, PlayerRole receiverPlayerRole) {
         var gameDataId = "gd00001";
-        var seerAction = new SeerAction(
+        var nightAction = new NightAction(
                 gameDataId,
-                seerDeviceId,
+                deviceId,
+                playerRole,
                 receiverDeviceId,
                 receiverPlayerName,
                 receiverPlayerIcon,
                 receiverPlayerRole);
-        this.registrySeerAction(seerAction);
+        this.registryNightAction(nightAction);
     }
 
 }

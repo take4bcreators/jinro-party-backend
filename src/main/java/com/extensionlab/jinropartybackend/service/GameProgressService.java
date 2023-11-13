@@ -37,6 +37,9 @@ public class GameProgressService {
     @Autowired
     DataTransferService dataTransferService;
 
+    @Autowired
+    NightActionService nightActionService;
+
     public void assignPlayerRoleAndTeam() {
         List<PlayerInfo> playerList = this.playerInfoService.getAllPlayerData();
         int playerCount = playerList.size();
@@ -289,6 +292,13 @@ public class GameProgressService {
         DropoutPlayerData dropoutPlayerData = this.dataTransferService.toDropoutPlayerData(decidedPlayer);
         this.dropoutPlayerDataService.deleteAll();
         this.dropoutPlayerDataService.registryData(dropoutPlayerData);
+    }
+
+    public void prepareNightActionTables() {
+        // @remind ここに夜のアクション初期化処理を入れる
+
+        this.nightActionService.deleteAll();
+
     }
 
 }

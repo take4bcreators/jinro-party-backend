@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.extensionlab.jinropartybackend.model.api.APIReplyExistsDeviceId;
 import com.extensionlab.jinropartybackend.model.api.APISendDeviceId;
-import com.extensionlab.jinropartybackend.service.SeerActionService;
+import com.extensionlab.jinropartybackend.service.NightActionService;
 
 @RestController
 @CrossOrigin
-public class ExistsSeerData {
+public class ExistsNightActionData {
 
     @Autowired
-    SeerActionService service;
+    NightActionService service;
 
-    @PostMapping("/api/post-exists-seer-data")
+    @PostMapping("/api/post-exists-night-action-data")
     public APIReplyExistsDeviceId post(@ModelAttribute APISendDeviceId postData) {
         String deviceId = postData.getDeviceId();
         boolean result = this.service.existsRecord(deviceId);

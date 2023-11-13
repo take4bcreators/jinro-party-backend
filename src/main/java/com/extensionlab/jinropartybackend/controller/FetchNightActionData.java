@@ -10,20 +10,20 @@ import com.extensionlab.jinropartybackend.enums.PlayerState;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import com.extensionlab.jinropartybackend.model.api.APIReplyPlayerData;
 import com.extensionlab.jinropartybackend.model.api.APISendDeviceId;
-import com.extensionlab.jinropartybackend.model.entity.SeerAction;
-import com.extensionlab.jinropartybackend.service.SeerActionService;
+import com.extensionlab.jinropartybackend.model.entity.NightAction;
+import com.extensionlab.jinropartybackend.service.NightActionService;
 
 @RestController
 @CrossOrigin
-public class FetchSeerData {
+public class FetchNightActionData {
 
     @Autowired
-    SeerActionService service;
+    NightActionService service;
 
-    @PostMapping("/api/post-fetch-seer-data")
+    @PostMapping("/api/post-fetch-night-action-data")
     public APIReplyPlayerData post(@ModelAttribute APISendDeviceId postData) {
         String deviceId = postData.getDeviceId();
-        SeerAction result = this.service.findRecord(deviceId);
+        NightAction result = this.service.findRecord(deviceId);
         var replyData = new APIReplyPlayerData(
                 result.getReceiverDeviceId(),
                 result.getReceiverPlayerName(),
