@@ -2,6 +2,7 @@ package com.extensionlab.jinropartybackend.service;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 // import java.util.Arrays;
 import java.util.List;
 
@@ -308,9 +309,9 @@ public class PlayerInfoService {
     }
 
     /**
-     * 全プレイヤーデータリスト取得
+     * 全生存プレイヤーデータリスト取得
      * 
-     * @return 全プレイヤーデータリスト
+     * @return 全生存プレイヤーデータリスト
      */
     public List<PlayerInfo> getAllAlivePlayerData() {
         var gameDataId = "gd00001";
@@ -318,4 +319,14 @@ public class PlayerInfoService {
         List<PlayerInfo> allAlivePlayerData = this.repository.findByGameDataIdAndPlayerState(gameDataId, playerState);
         return allAlivePlayerData;
     }
+
+    public List<PlayerInfo> getAlivePlayerListExcludeBy(String deviceId) {
+        List<PlayerInfo> alivePlayerList = this.getAllAlivePlayerData();
+        List<PlayerInfo> excludeList = alivePlayerList
+                .stream()
+                .filter(e -> !e.getDeviceId().equals(deviceId))
+                .collect(Collectors.toList());
+        return excludeList;
+    }
+
 }

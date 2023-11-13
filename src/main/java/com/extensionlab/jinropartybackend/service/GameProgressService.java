@@ -280,4 +280,15 @@ public class GameProgressService {
         this.playerInfoService.updatePlayerState(dropoutPlayerData.getDeviceId(), PlayerState.Dead);
     }
 
+    /**
+     * ランダムに投票を決定する処理
+     */
+    public void randomlyDecideVote() {
+        List<VoteReceivers> maxCountPlayers = votesService.getMaxCountReceivers();
+        VoteReceivers decidedPlayer = this.collectionUtilService.getRandomElement(maxCountPlayers);
+        DropoutPlayerData dropoutPlayerData = this.dataTransferService.toDropoutPlayerData(decidedPlayer);
+        this.dropoutPlayerDataService.deleteAll();
+        this.dropoutPlayerDataService.registryData(dropoutPlayerData);
+    }
+
 }
