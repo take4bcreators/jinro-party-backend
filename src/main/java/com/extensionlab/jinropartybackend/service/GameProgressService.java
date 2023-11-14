@@ -40,6 +40,9 @@ public class GameProgressService {
     @Autowired
     NightActionService nightActionService;
 
+    @Autowired
+    WerewolfActionExecuterDataService werewolfActionExecuterDataService;
+
     public void assignPlayerRoleAndTeam() {
         List<PlayerInfo> playerList = this.playerInfoService.getAllPlayerData();
         int playerCount = playerList.size();
@@ -187,6 +190,7 @@ public class GameProgressService {
      * 未投票プレイヤーへの対応処理
      */
     public void processUnvotedPlayers() {
+        // @remind 決選投票の場合の処理を考える
         // 未投票プレイヤーリスト取得
         List<PlayerInfo> unvotedPlayerList = this.getUnvotedPlayerList();
         if (unvotedPlayerList.size() == 0) {
@@ -194,16 +198,16 @@ public class GameProgressService {
         }
 
         // 生存プレイヤーのリストを取得
-        List<PlayerInfo> alivePlayers = playerInfoService.getAllAlivePlayerData();
+        List<VoteReceivers> allVoteReceiversList = this.voteReceiversService.getAllVoteReceiversList();
 
         // 投票データ作成（投票先プレイヤーはランダム）
         List<Votes> newVoteList = new ArrayList<>();
         for (PlayerInfo unvotedPlayer : unvotedPlayerList) {
-            List<PlayerInfo> nonSelfPlayersList = alivePlayers
+            List<VoteReceivers> nonSelfPlayersList = allVoteReceiversList
                     .stream()
                     .filter(e -> !e.getPlayerName().equals(unvotedPlayer.getPlayerName()))
                     .collect(Collectors.toList());
-            PlayerInfo randomPlayer = this.collectionUtilService.getRandomElement(nonSelfPlayersList);
+            VoteReceivers randomPlayer = this.collectionUtilService.getRandomElement(nonSelfPlayersList);
             newVoteList.add(new Votes(
                     unvotedPlayer.getGameDataId(),
                     unvotedPlayer.getDeviceId(),
@@ -296,9 +300,57 @@ public class GameProgressService {
 
     public void prepareNightActionTables() {
         // @remind ここに夜のアクション初期化処理を入れる
-
         this.nightActionService.deleteAll();
+        this.decideWerewolfActionExecuter();
+    }
 
+    private void decideWerewolfActionExecuter() {
+        this.werewolfActionExecuterDataService.deleteAll();
+        List<PlayerInfo> werewolfPlayers = this.playerInfoService.getAlivePlayerListOnlyWerewolf();
+        PlayerInfo player = this.collectionUtilService.getRandomElement(werewolfPlayers);
+        this.werewolfActionExecuterDataService.registryPlayerData(
+                player.getDeviceId(),
+                player.getPlayerName(),
+                player.getPlayerIcon());
+    }
+
+    public boolean execNightAction(String deviceId, PlayerRole playerRole, String receiverDeviceId) {
+        PlayerInfo receiver = this.playerInfoService.getPlayerInfo(receiverDeviceId);
+        try {
+            this.nightActionService.registryNightAction(
+                    deviceId,
+                    playerRole,
+                    receiver.getDeviceId(),
+                    receiver.getPlayerName(),
+                    receiver.getPlayerIcon(),
+                    receiver.getPlayerRole());
+        } catch (Exception e) {
+            System.err.println(e);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean execSeerAction(String deviceId, String receiverDeviceId) {
+        return this.execNightAction(deviceId, PlayerRole.Seer, receiverDeviceId);
+    }
+
+    public boolean execEnqueteAction(String deviceId, String receiverDeviceId) {
+        PlayerInfo player = this.playerInfoService.getPlayerInfo(deviceId);
+        return this.execNightAction(deviceId, player.getPlayerRole(), receiverDeviceId);
+    }
+
+    public boolean execHunterAction(String deviceId, String receiverDeviceId) {
+        return this.execNightAction(deviceId, PlayerRole.Hunter, receiverDeviceId);
+    }
+
+    public boolean execWerewolfAction(String deviceId, String receiverDeviceId) {
+        return this.execNightAction(deviceId, PlayerRole.Werewolf, receiverDeviceId);
+    }
+
+    public boolean execMediumAction(String deviceId) {
+        DropoutPlayerData receiver = this.dropoutPlayerDataService.getData();
+        return this.execNightAction(deviceId, PlayerRole.Medium, receiver.getDeviceId());
     }
 
 }

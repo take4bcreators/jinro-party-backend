@@ -329,4 +329,22 @@ public class PlayerInfoService {
         return excludeList;
     }
 
+    public List<PlayerInfo> getAlivePlayerListExcludeWerewolf() {
+        List<PlayerInfo> alivePlayerList = this.getAllAlivePlayerData();
+        List<PlayerInfo> excludeList = alivePlayerList
+                .stream()
+                .filter(e -> !e.getPlayerRole().equals(PlayerRole.Werewolf))
+                .collect(Collectors.toList());
+        return excludeList;
+    }
+
+    public List<PlayerInfo> getAlivePlayerListOnlyWerewolf() {
+        List<PlayerInfo> alivePlayerList = this.getAllAlivePlayerData();
+        List<PlayerInfo> excludeList = alivePlayerList
+                .stream()
+                .filter(e -> e.getPlayerRole().equals(PlayerRole.Werewolf))
+                .collect(Collectors.toList());
+        return excludeList;
+    }
+
 }
