@@ -15,8 +15,6 @@ public class MainWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     GeneralWebSocketService generalWebSocketService;
 
-    // @Autowired
-    // MainWebSocketService mainWebSocketService;
     @Autowired
     MainWebSocketRoutingService mainWebSocketRoutingService;
 

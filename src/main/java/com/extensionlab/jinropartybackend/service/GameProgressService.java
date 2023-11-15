@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerState;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
@@ -25,28 +26,34 @@ public class GameProgressService {
     CollectionUtilService collectionUtilService;
 
     @Autowired
+    DataTransferService dataTransferService;
+
+    @Autowired
+    MainWebSocketProcessService mainWebSocketProcessService;
+
+    @Autowired
+    GameDataService gameDataService;
+
+    @Autowired
     PlayerInfoService playerInfoService;
 
     @Autowired
-    VotesService votesService;
+    EntryPlayerInfoService entryPlayerInfoService;
 
     @Autowired
     VoteReceiversService voteReceiversService;
 
     @Autowired
-    DropoutPlayerDataService dropoutPlayerDataService;
+    VotesService votesService;
 
     @Autowired
-    DataTransferService dataTransferService;
+    DropoutPlayerDataService dropoutPlayerDataService;
 
     @Autowired
     NightActionService nightActionService;
 
     @Autowired
     WerewolfActionExecuterDataService werewolfActionExecuterDataService;
-
-    @Autowired
-    GameDataService gameDataService;
 
     public void assignPlayerRoleAndTeam() {
         List<PlayerInfo> playerList = this.playerInfoService.getAllPlayerData();
@@ -448,6 +455,26 @@ public class GameProgressService {
         }
         this.gameDataService.updateWinningTeam(PlayerTeam.Empty);
         return;
+    }
+
+    public void resetGame() {
+        this.resetGameScreen();
+        this.resetAllTables();
+    }
+
+    private void resetGameScreen() {
+        this.mainWebSocketProcessService.gameScreenChange(GameState.PreGame);
+    }
+
+    private void resetAllTables() {
+        this.gameDataService.resetAll();
+        this.playerInfoService.deleteAll();
+        this.entryPlayerInfoService.deleteAll();
+        this.voteReceiversService.deleteAll();
+        this.votesService.deleteAll();
+        this.dropoutPlayerDataService.deleteAll();
+        this.nightActionService.deleteAll();
+        this.werewolfActionExecuterDataService.deleteAll();
     }
 
 }

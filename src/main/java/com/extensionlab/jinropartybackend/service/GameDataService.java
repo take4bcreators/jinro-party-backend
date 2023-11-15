@@ -191,4 +191,12 @@ public class GameDataService {
         this.repository.save(newGameData);
         return;
     }
+
+    @Transactional
+    public void resetAll() {
+        String gameDataId = "gd00001";
+        var resetGameData = new GameData(gameDataId, GameState.PreGame, GameMode.Normal, false, 0, 0, PlayerTeam.Empty);
+        this.repository.save(resetGameData);
+    }
+
 }
