@@ -1,5 +1,7 @@
 package com.extensionlab.jinropartybackend.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +28,15 @@ public class FetchDropoutPlayerController {
 
     @GetMapping("/api/get-fetch-dropout-player")
     public APIPlayerBasicData get() {
-        DropoutPlayerData dropOutPlayer = this.dropoutPlayerDataService.getData();
+        Optional<DropoutPlayerData> dropOutPlayerWrap = this.dropoutPlayerDataService.getData();
+        if (dropOutPlayerWrap.isEmpty()) {
+            // @todo ここの戻り値検討
+            return new APIPlayerBasicData(
+                    "",
+                    "",
+                    "");
+        }
+        DropoutPlayerData dropOutPlayer = dropOutPlayerWrap.get();
         APIPlayerBasicData apiPlayerBasicData = this.dataTransferService.toAPIPlayerBasicData(dropOutPlayer);
         return apiPlayerBasicData;
     }

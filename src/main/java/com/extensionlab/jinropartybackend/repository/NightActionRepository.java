@@ -1,5 +1,6 @@
 package com.extensionlab.jinropartybackend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,5 +22,7 @@ public interface NightActionRepository extends JpaRepository<NightAction, String
     Optional<NightAction> findByGameDataIdAndDeviceId(String gameDataId, String deviceId);
 
     boolean existsByGameDataIdAndDeviceId(String gameDataId, String deviceId);
+
+    List<NightAction> findAllByGameDataId(String gameDataId);
 
 }

@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.extensionlab.jinropartybackend.enums.GameMode;
 import com.extensionlab.jinropartybackend.enums.GameState;
+import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import com.extensionlab.jinropartybackend.model.entity.GameData;
 import com.extensionlab.jinropartybackend.repository.GameDataRepository;
 
@@ -28,7 +29,8 @@ public class GameDataServiceTest {
     void testGetGameState() {
         // Mockito.when(モック対象メソッド).thenReturn(設定する戻り値);
         Mockito.when(repository.findById("gd00001"))
-                .thenReturn(Optional.of(new GameData("gd00001", GameState.PreGame, GameMode.Normal, false, 1, 1)));
+                .thenReturn(Optional.of(
+                        new GameData("gd00001", GameState.PreGame, GameMode.Normal, false, 1, 1, PlayerTeam.Empty)));
 
         assertEquals(gameDataService.getGameState(), GameState.PreGame);
     }

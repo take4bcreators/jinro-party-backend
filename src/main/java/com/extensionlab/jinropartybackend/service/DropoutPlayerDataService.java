@@ -1,6 +1,7 @@
 package com.extensionlab.jinropartybackend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,9 +48,13 @@ public class DropoutPlayerDataService {
         return dropoutPlayerDataList;
     }
 
-    public DropoutPlayerData getData() {
+    public Optional<DropoutPlayerData> getData() {
         List<DropoutPlayerData> dropoutPlayerDataList = this.getAllDropoutPlayerDataList();
-        DropoutPlayerData dropoutPlayerData = dropoutPlayerDataList.get(0);
+        if (dropoutPlayerDataList.size() == 0) {
+            Optional<DropoutPlayerData> empty = Optional.empty();
+            return empty;
+        }
+        Optional<DropoutPlayerData> dropoutPlayerData = Optional.of(dropoutPlayerDataList.get(0));
         return dropoutPlayerData;
     }
 

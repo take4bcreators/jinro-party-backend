@@ -34,6 +34,11 @@ public class ExileAnnouncementComponent extends GameStateComponent {
     @Override
     public void runEndTask(GameStateService gameStateService) {
         this.gameProgressService.updatePlayerStateForDropOutPlayer();
+        if (this.gameProgressService.checkGameEnd()) {
+            this.gameProgressService.updateWinningTeam();
+            gameStateService.execChangeStateTask(GameState.GameEnd);
+            return;
+        }
         gameStateService.execChangeStateTask(this.getNexGameState());
     }
 

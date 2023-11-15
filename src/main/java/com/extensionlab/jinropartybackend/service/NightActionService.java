@@ -1,5 +1,6 @@
 package com.extensionlab.jinropartybackend.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,12 @@ public class NightActionService {
                 receiverPlayerIcon,
                 receiverPlayerRole);
         this.registryNightAction(nightAction);
+    }
+
+    public List<NightAction> getAllNightActionList() {
+        var gameDataId = "gd00001";
+        List<NightAction> voteList = this.repository.findAllByGameDataId(gameDataId);
+        return voteList;
     }
 
 }

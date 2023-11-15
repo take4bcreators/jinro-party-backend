@@ -1,6 +1,7 @@
 package com.extensionlab.jinropartybackend.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import com.extensionlab.jinropartybackend.enums.PlayerRole;
 import com.extensionlab.jinropartybackend.enums.PlayerState;
 import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import com.extensionlab.jinropartybackend.model.entity.DropoutPlayerData;
+import com.extensionlab.jinropartybackend.model.entity.NightAction;
 import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
 import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
 import com.extensionlab.jinropartybackend.model.entity.Votes;
@@ -42,6 +44,9 @@ public class GameProgressService {
 
     @Autowired
     WerewolfActionExecuterDataService werewolfActionExecuterDataService;
+
+    @Autowired
+    GameDataService gameDataService;
 
     public void assignPlayerRoleAndTeam() {
         List<PlayerInfo> playerList = this.playerInfoService.getAllPlayerData();
@@ -283,7 +288,11 @@ public class GameProgressService {
      * 脱落処理
      */
     public void updatePlayerStateForDropOutPlayer() {
-        DropoutPlayerData dropoutPlayerData = this.dropoutPlayerDataService.getData();
+        Optional<DropoutPlayerData> dropoutPlayerDataWrap = this.dropoutPlayerDataService.getData();
+        if (dropoutPlayerDataWrap.isEmpty()) {
+            return;
+        }
+        DropoutPlayerData dropoutPlayerData = dropoutPlayerDataWrap.get();
         this.playerInfoService.updatePlayerState(dropoutPlayerData.getDeviceId(), PlayerState.Dead);
     }
 
@@ -349,8 +358,110 @@ public class GameProgressService {
     }
 
     public boolean execMediumAction(String deviceId) {
-        DropoutPlayerData receiver = this.dropoutPlayerDataService.getData();
+        Optional<DropoutPlayerData> receiverWrap = this.dropoutPlayerDataService.getData();
+        if (receiverWrap.isEmpty()) {
+            return true;
+        }
+        DropoutPlayerData receiver = receiverWrap.get();
         return this.execNightAction(deviceId, PlayerRole.Medium, receiver.getDeviceId());
+    }
+
+    public void execAfterNightActionTask() {
+        this.registryWerewolfActionReceiver();
+    }
+
+    private void registryWerewolfActionReceiver() {
+        // 脱落者用テーブルのリセット
+        this.dropoutPlayerDataService.deleteAll();
+        System.out.println("debug: pass 001");
+
+        // 夜アクションのデータを取得
+        List<NightAction> allNightActionList = this.nightActionService.getAllNightActionList();
+        System.out.println("debug: pass 002");
+        System.out.println("debug: allNightActionList.size(): " + allNightActionList.size());
+
+        // 人狼データ取得
+        Optional<NightAction> werewolfDataWrap = allNightActionList
+                .stream()
+                .filter(e -> e.getPlayerRole().equals(PlayerRole.Werewolf))
+                .findFirst();
+        if (werewolfDataWrap.isEmpty()) {
+            return;
+        }
+        NightAction werewolfData = werewolfDataWrap.get();
+        System.out.println("debug: pass 003");
+        System.out.println("debug: werewolfData: " + werewolfData);
+
+        // 狩人データの取得
+        List<String> hunterReceiverDeviceIds = allNightActionList
+                .stream()
+                .filter(e -> e.getPlayerRole().equals(PlayerRole.Hunter))
+                .map(e -> e.getReceiverDeviceId())
+                .distinct()
+                .collect(Collectors.toList());
+        System.out.println("debug: pass 004");
+        System.out.println("debug: hunterReceiverDeviceIds.size(): " + hunterReceiverDeviceIds.size());
+        System.out.println("debug: hunterReceiverDeviceIds.get(0): " + hunterReceiverDeviceIds.get(0));
+        System.out.println("debug: werewolfData.getReceiverDeviceId(): " + werewolfData.getReceiverDeviceId());
+        System.out.println("debug: hunterReceiverDeviceIds.contains(werewolfData.getReceiverDeviceId()): "
+                + hunterReceiverDeviceIds.contains(werewolfData.getReceiverDeviceId()));
+
+        // 狩人データ含まれているか判定
+        if (hunterReceiverDeviceIds.contains(werewolfData.getReceiverDeviceId())) {
+            System.out.println("debug: pass 005-A");
+            return;
+        }
+        System.out.println("debug: pass 005-B");
+
+        // 登録
+        this.dropoutPlayerDataService
+                .registryData(new DropoutPlayerData(
+                        werewolfData.getGameDataId(),
+                        werewolfData.getReceiverDeviceId(),
+                        werewolfData.getReceiverPlayerName(),
+                        werewolfData.getReceiverPlayerIcon()));
+        System.out.println("debug: pass 006");
+    }
+
+    public boolean checkGameEnd() {
+        List<PlayerInfo> allAlivePlayerData = this.playerInfoService.getAllAlivePlayerData();
+        long werewolfCount = allAlivePlayerData
+                .stream()
+                .filter(e -> e.getPlayerRole().equals(PlayerRole.Werewolf))
+                .count();
+        if (werewolfCount == 0) {
+            return true;
+        }
+        long otherCount = allAlivePlayerData
+                .stream()
+                .filter(e -> !e.getPlayerRole().equals(PlayerRole.Werewolf))
+                .count();
+        if (otherCount <= werewolfCount) {
+            return true;
+        }
+        return false;
+    }
+
+    public void updateWinningTeam() {
+        List<PlayerInfo> allAlivePlayerData = this.playerInfoService.getAllAlivePlayerData();
+        long werewolfCount = allAlivePlayerData
+                .stream()
+                .filter(e -> e.getPlayerRole().equals(PlayerRole.Werewolf))
+                .count();
+        if (werewolfCount == 0) {
+            this.gameDataService.updateWinningTeam(PlayerTeam.Townsfolk);
+            return;
+        }
+        long otherCount = allAlivePlayerData
+                .stream()
+                .filter(e -> !e.getPlayerRole().equals(PlayerRole.Werewolf))
+                .count();
+        if (otherCount <= werewolfCount) {
+            this.gameDataService.updateWinningTeam(PlayerTeam.WerewolfPack);
+            return;
+        }
+        this.gameDataService.updateWinningTeam(PlayerTeam.Empty);
+        return;
     }
 
 }

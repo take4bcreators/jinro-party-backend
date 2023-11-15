@@ -24,6 +24,7 @@ public class NightPhaseStartComponent extends GameStateComponent {
 
     @Override
     public void runStartTask() {
+        // 夜アクション前処理
         this.gameProgressService.prepareNightActionTables();
     }
 

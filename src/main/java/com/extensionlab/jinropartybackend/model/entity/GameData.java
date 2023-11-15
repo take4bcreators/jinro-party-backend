@@ -2,6 +2,8 @@ package com.extensionlab.jinropartybackend.model.entity;
 
 import com.extensionlab.jinropartybackend.enums.GameMode;
 import com.extensionlab.jinropartybackend.enums.GameState;
+import com.extensionlab.jinropartybackend.enums.PlayerTeam;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,5 +41,9 @@ public class GameData {
 
     @Column(name = "turn_vote_count")
     private int turnVoteCount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "winning_team")
+    private PlayerTeam winningTeam;
 
 }

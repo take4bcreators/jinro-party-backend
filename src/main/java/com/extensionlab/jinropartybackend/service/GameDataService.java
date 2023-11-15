@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.enums.GameMode;
 import com.extensionlab.jinropartybackend.enums.GameState;
+import com.extensionlab.jinropartybackend.enums.PlayerTeam;
 import com.extensionlab.jinropartybackend.model.entity.GameData;
 import com.extensionlab.jinropartybackend.repository.GameDataRepository;
 import jakarta.transaction.Transactional;
@@ -47,7 +48,9 @@ public class GameDataService {
             boolean initEnd = false;
             int initCurrentTurn = 0;
             int initTurnVoteCount = 0;
-            newGameData = new GameData(gameDataId, gameState, gameMode, initEnd, initCurrentTurn, initTurnVoteCount);
+            PlayerTeam initWinTeam = PlayerTeam.Empty;
+            newGameData = new GameData(gameDataId, gameState, gameMode, initEnd, initCurrentTurn, initTurnVoteCount,
+                    initWinTeam);
         }
         this.repository.save(newGameData);
         return;
@@ -73,7 +76,9 @@ public class GameDataService {
             boolean initEnd = false;
             int initCurrentTurn = 0;
             int initTurnVoteCount = 0;
-            newGameData = new GameData(gameDataId, gameState, gameMode, initEnd, initCurrentTurn, initTurnVoteCount);
+            PlayerTeam initWinTeam = PlayerTeam.Empty;
+            newGameData = new GameData(gameDataId, gameState, gameMode, initEnd, initCurrentTurn, initTurnVoteCount,
+                    initWinTeam);
         }
         this.repository.save(newGameData);
         return;
@@ -171,4 +176,19 @@ public class GameDataService {
         return;
     }
 
+    public PlayerTeam getWinningTeam() {
+        String gameDataId = "gd00001";
+        Optional<GameData> record = this.repository.findById(gameDataId);
+        return record.get().getWinningTeam();
+    }
+
+    @Transactional
+    public void updateWinningTeam(PlayerTeam winningTeam) {
+        String gameDataId = "gd00001";
+        Optional<GameData> record = this.repository.findById(gameDataId);
+        GameData newGameData = record.get();
+        newGameData.setWinningTeam(winningTeam);
+        this.repository.save(newGameData);
+        return;
+    }
 }

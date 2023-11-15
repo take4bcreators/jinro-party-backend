@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.gamestate.GameStateSettings;
 import com.extensionlab.jinropartybackend.service.GameDataService;
+import com.extensionlab.jinropartybackend.service.GameProgressService;
 import com.extensionlab.jinropartybackend.service.GameStateService;
 
 @Component
@@ -12,6 +13,9 @@ public class NightPhaseEndComponent extends GameStateComponent {
 
     @Autowired
     GameDataService gameDataService;
+
+    @Autowired
+    GameProgressService gameProgressService;
 
     public NightPhaseEndComponent() {
         super(new GameStateSettings(
@@ -24,6 +28,8 @@ public class NightPhaseEndComponent extends GameStateComponent {
 
     @Override
     public void runStartTask() {
+        // 夜アクション後処理
+        this.gameProgressService.execAfterNightActionTask();
     }
 
     @Override
