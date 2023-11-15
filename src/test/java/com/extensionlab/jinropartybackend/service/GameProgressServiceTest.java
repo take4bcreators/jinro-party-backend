@@ -16,9 +16,7 @@ public class GameProgressServiceTest {
 
     @Test
     void testExecAfterNightActionTask() {
-
         this.gameProgressService.execAfterNightActionTask();
-
     }
 
 }

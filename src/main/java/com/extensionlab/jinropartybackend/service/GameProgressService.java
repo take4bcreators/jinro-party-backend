@@ -373,12 +373,9 @@ public class GameProgressService {
     private void registryWerewolfActionReceiver() {
         // 脱落者用テーブルのリセット
         this.dropoutPlayerDataService.deleteAll();
-        System.out.println("debug: pass 001");
 
         // 夜アクションのデータを取得
         List<NightAction> allNightActionList = this.nightActionService.getAllNightActionList();
-        System.out.println("debug: pass 002");
-        System.out.println("debug: allNightActionList.size(): " + allNightActionList.size());
 
         // 人狼データ取得
         Optional<NightAction> werewolfDataWrap = allNightActionList
@@ -389,8 +386,6 @@ public class GameProgressService {
             return;
         }
         NightAction werewolfData = werewolfDataWrap.get();
-        System.out.println("debug: pass 003");
-        System.out.println("debug: werewolfData: " + werewolfData);
 
         // 狩人データの取得
         List<String> hunterReceiverDeviceIds = allNightActionList
@@ -399,19 +394,11 @@ public class GameProgressService {
                 .map(e -> e.getReceiverDeviceId())
                 .distinct()
                 .collect(Collectors.toList());
-        System.out.println("debug: pass 004");
-        System.out.println("debug: hunterReceiverDeviceIds.size(): " + hunterReceiverDeviceIds.size());
-        System.out.println("debug: hunterReceiverDeviceIds.get(0): " + hunterReceiverDeviceIds.get(0));
-        System.out.println("debug: werewolfData.getReceiverDeviceId(): " + werewolfData.getReceiverDeviceId());
-        System.out.println("debug: hunterReceiverDeviceIds.contains(werewolfData.getReceiverDeviceId()): "
-                + hunterReceiverDeviceIds.contains(werewolfData.getReceiverDeviceId()));
 
         // 狩人データ含まれているか判定
         if (hunterReceiverDeviceIds.contains(werewolfData.getReceiverDeviceId())) {
-            System.out.println("debug: pass 005-A");
             return;
         }
-        System.out.println("debug: pass 005-B");
 
         // 登録
         this.dropoutPlayerDataService
@@ -420,7 +407,6 @@ public class GameProgressService {
                         werewolfData.getReceiverDeviceId(),
                         werewolfData.getReceiverPlayerName(),
                         werewolfData.getReceiverPlayerIcon()));
-        System.out.println("debug: pass 006");
     }
 
     public boolean checkGameEnd() {

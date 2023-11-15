@@ -21,7 +21,7 @@ public class VotingComponent extends GameStateComponent {
         super(new GameStateSettings(
                 "ST10",
                 GameState.Voting,
-                15000,
+                20000,
                 GameState.DayPhaseEnd,
                 GameState.VotingEnd));
     }
