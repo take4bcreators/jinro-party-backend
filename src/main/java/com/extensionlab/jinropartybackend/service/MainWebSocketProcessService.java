@@ -173,6 +173,41 @@ public class MainWebSocketProcessService {
         this.sendMTAndGMSite(action, "", "", "");
     }
 
+    public void sendMTSite(WsRequestAction action, String param01, String param02, String param03) {
+        if (param01 == null) {
+            param01 = "";
+        }
+        if (param02 == null) {
+            param02 = "";
+        }
+        if (param03 == null) {
+            param03 = "";
+        }
+        APIWsData returnData = new APIWsData(
+                WsDestinationType.MonitorSite,
+                "",
+                WsSenderType.Server,
+                "",
+                action,
+                param01,
+                param02,
+                param03);
+        String returnJsonToMT = this.convertWsDataToJson(returnData);
+        this.sendJSONTextAll(returnJsonToMT);
+    }
+
+    public void sendMTSite(WsRequestAction action, String param01, String param02) {
+        this.sendMTSite(action, param01, param02, "");
+    }
+
+    public void sendMTSite(WsRequestAction action, String param01) {
+        this.sendMTSite(action, param01, "", "");
+    }
+
+    public void sendMTSite(WsRequestAction action) {
+        this.sendMTSite(action, "", "", "");
+    }
+
     public void countdownTimerStart(int time) {
         String timeText = String.valueOf(time);
         this.sendMTAndGMSite(WsRequestAction.CountdownTimerStart, timeText);
@@ -186,4 +221,8 @@ public class MainWebSocketProcessService {
         this.sendMTAndGMSite(WsRequestAction.CountdownTimerResume);
     }
 
+    public void returnEntryPlayerCount(int playerCount) {
+        String playerCountStr = String.valueOf(playerCount);
+        this.sendMTSite(WsRequestAction.ReturnEntryPlayerCount, playerCountStr);
+    }
 }

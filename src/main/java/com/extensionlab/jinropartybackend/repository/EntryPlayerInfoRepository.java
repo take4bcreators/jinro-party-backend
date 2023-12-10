@@ -27,4 +27,6 @@ public interface EntryPlayerInfoRepository extends JpaRepository<EntryPlayerInfo
         void deleteByGameDataId(String gameDataId);
 
         void deleteByGameDataIdAndDeviceId(String gameDataId, String deviceId);
+
+        long countByGameDataIdAndEntryPlayerState(String gameDataId, EntryPlayerState entry);
 }

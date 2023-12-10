@@ -1,6 +1,8 @@
 package com.extensionlab.jinropartybackend.model.entity;
 
 import com.extensionlab.jinropartybackend.enums.EntryPlayerState;
+import com.extensionlab.jinropartybackend.model.interfaces.GamePlayer;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "entry_player_info", schema = "prd")
 @IdClass(value = EntryPlayerInfoPK.class)
-public class EntryPlayerInfo {
+public class EntryPlayerInfo implements GamePlayer {
 
     @Id
     @Column(name = "game_data_id")

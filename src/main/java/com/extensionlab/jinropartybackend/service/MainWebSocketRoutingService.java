@@ -69,30 +69,6 @@ public class MainWebSocketRoutingService {
             case ReturnCurrentGameState:
                 this.mainWebSocketProcessService.returnCurrentGameState(receiveData);
                 break;
-            case RoleRegistration:
-                // @todo
-                break;
-            case ExileVoteRegistration:
-                // @todo
-                break;
-            case SurveyRegistration:
-                // @todo
-                break;
-            case SeerActionExecute:
-                // @todo
-                break;
-            case MediumActionExecute:
-                // @todo
-                break;
-            case HunterActionExecute:
-                // @todo
-                break;
-            case WerewolfAttackVote:
-                // @todo
-                break;
-            case GameEnd:
-                // @todo
-                break;
             default:
                 break;
         }

@@ -1,5 +1,7 @@
 package com.extensionlab.jinropartybackend.model.entity;
 
+import com.extensionlab.jinropartybackend.model.interfaces.GamePlayer;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "dropout_player_data", schema = "prd")
 @IdClass(value = VoteReceiversPK.class)
-public class DropoutPlayerData {
+public class DropoutPlayerData implements GamePlayer {
 
     @Id
     @Column(name = "game_data_id")

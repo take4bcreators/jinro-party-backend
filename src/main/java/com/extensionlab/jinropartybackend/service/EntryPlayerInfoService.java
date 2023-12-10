@@ -140,4 +140,15 @@ public class EntryPlayerInfoService {
         return entryPlayerInfoList;
     }
 
+    /**
+     * エントリー済みプレイヤー数取得
+     * 
+     * @return
+     */
+    public int getEntryPlayerCount() {
+        String gameDataId = "gd00001";
+        long allCount = this.repository.countByGameDataIdAndEntryPlayerState(gameDataId, EntryPlayerState.Entry);
+        int allCountInt = Math.toIntExact(allCount);
+        return allCountInt;
+    }
 }

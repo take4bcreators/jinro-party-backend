@@ -8,27 +8,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.extensionlab.jinropartybackend.model.api.APIReplyProcessResult;
 import com.extensionlab.jinropartybackend.model.api.APISendEntryPlayerData;
-import com.extensionlab.jinropartybackend.service.EntryPlayerInfoService;
+import com.extensionlab.jinropartybackend.service.GameProgressService;
 
 @RestController
 @CrossOrigin
 public class PlayerRegistController {
 
     @Autowired
-    EntryPlayerInfoService service;
+    GameProgressService gameProgressService;
 
     @PostMapping("/api/post-player-regist")
     public APIReplyProcessResult post(@ModelAttribute APISendEntryPlayerData postData) {
         String deviceId = postData.getDeviceId();
         String playerName = postData.getPlayerName();
         String playerIcon = postData.getPlayerIcon();
-        boolean result = false;
-        try {
-            service.upsertEntryData(deviceId, playerName, playerIcon);
-            result = true;
-        } catch (Exception e) {
-            System.err.println(e);
-        }
+        boolean result = this.gameProgressService.registEntryPlayer(deviceId, playerName, playerIcon);
         var replyData = new APIReplyProcessResult(result);
         return replyData;
     }

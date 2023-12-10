@@ -477,4 +477,32 @@ public class GameProgressService {
         this.werewolfActionExecuterDataService.deleteAll();
     }
 
+    public int sendEntryPlayerCountToMTSite() {
+        return this.entryPlayerInfoService.getEntryPlayerCount();
+    }
+
+    public boolean registEntryPlayer(String deviceId, String playerName, String playerIcon) {
+        try {
+            this.entryPlayerInfoService.upsertEntryData(deviceId, playerName, playerIcon);
+        } catch (Exception e) {
+            System.err.println(e);
+            return false;
+        }
+        int entryPlayerCount = this.sendEntryPlayerCountToMTSite();
+        this.mainWebSocketProcessService.returnEntryPlayerCount(entryPlayerCount);
+        return true;
+    }
+
+    public boolean removeEntryPlayer(String deviceId) {
+        try {
+            this.entryPlayerInfoService.deleteByDeviceId(deviceId);
+        } catch (Exception e) {
+            System.err.println(e);
+            return false;
+        }
+        int entryPlayerCount = this.sendEntryPlayerCountToMTSite();
+        this.mainWebSocketProcessService.returnEntryPlayerCount(entryPlayerCount);
+        return true;
+    }
+
 }

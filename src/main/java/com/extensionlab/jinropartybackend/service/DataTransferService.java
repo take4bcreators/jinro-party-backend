@@ -9,13 +9,13 @@ import com.extensionlab.jinropartybackend.model.api.APIMultiPlayerBasicData;
 import com.extensionlab.jinropartybackend.model.api.APIPlayerBasicData;
 import com.extensionlab.jinropartybackend.model.common.PlayerBasic;
 import com.extensionlab.jinropartybackend.model.entity.DropoutPlayerData;
-import com.extensionlab.jinropartybackend.model.entity.PlayerInfo;
-import com.extensionlab.jinropartybackend.model.entity.VoteReceivers;
+import com.extensionlab.jinropartybackend.model.interfaces.GamePlayer;
+import com.extensionlab.jinropartybackend.model.interfaces.PlayerBase;
 
 @Service
 public class DataTransferService {
 
-    public PlayerBasic toPlayerBasic(VoteReceivers src) {
+    public <T extends GamePlayer> PlayerBasic toPlayerBasic(T src) {
         return new PlayerBasic(
                 src.getGameDataId(),
                 src.getDeviceId(),
@@ -23,7 +23,7 @@ public class DataTransferService {
                 src.getPlayerIcon());
     }
 
-    public DropoutPlayerData toDropoutPlayerData(PlayerBasic src) {
+    public <T extends GamePlayer> DropoutPlayerData toDropoutPlayerData(T src) {
         return new DropoutPlayerData(
                 src.getGameDataId(),
                 src.getDeviceId(),
@@ -31,27 +31,20 @@ public class DataTransferService {
                 src.getPlayerIcon());
     }
 
-    public DropoutPlayerData toDropoutPlayerData(VoteReceivers src) {
-        return new DropoutPlayerData(
-                src.getGameDataId(),
-                src.getDeviceId(),
-                src.getPlayerName(),
-                src.getPlayerIcon());
-    }
-
-    public APIPlayerBasicData toAPIPlayerBasicData(DropoutPlayerData src) {
+    public <T extends PlayerBase> APIPlayerBasicData toAPIPlayerBasicData(T src) {
         return new APIPlayerBasicData(
                 src.getDeviceId(),
                 src.getPlayerName(),
                 src.getPlayerIcon());
     }
 
-    public APIMultiPlayerBasicData toAPIMultiPlayerBasicData(List<PlayerInfo> src) {
+    public <T extends PlayerBase> APIMultiPlayerBasicData toAPIMultiPlayerBasicData(List<T> src) {
         List<APIPlayerBasicData> playerList = new ArrayList<>();
-        for (PlayerInfo playerInfo : src) {
+        for (T playerInfo : src) {
             playerList.add(new APIPlayerBasicData(playerInfo.getDeviceId(), playerInfo.getPlayerName(),
                     playerInfo.getPlayerIcon()));
         }
         return new APIMultiPlayerBasicData(playerList);
     }
+
 }
