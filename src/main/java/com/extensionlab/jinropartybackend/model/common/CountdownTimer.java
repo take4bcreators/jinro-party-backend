@@ -13,7 +13,7 @@ public class CountdownTimer {
     /** 現在の時間（ミリ秒） */
     private long currentTimeMSec;
     /** 開始時刻 */
-    private long startedTime;
+    private long startedTimeStamp;
     /** タイマー */
     private Timer timer;
     /** 終了時に実行するタスク */

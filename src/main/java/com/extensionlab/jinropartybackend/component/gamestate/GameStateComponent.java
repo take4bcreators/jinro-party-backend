@@ -6,10 +6,10 @@ import com.extensionlab.jinropartybackend.service.GameStateService;
 
 public abstract class GameStateComponent {
 
-    protected GameStateSettings gameStateConf;
+    protected GameStateSettings gameStateSettings;
 
-    public GameStateComponent(GameStateSettings gameStateConf) {
-        this.gameStateConf = gameStateConf;
+    public GameStateComponent(GameStateSettings gameStateSettings) {
+        this.gameStateSettings = gameStateSettings;
     }
 
     public void runInitTask() {
@@ -20,24 +20,24 @@ public abstract class GameStateComponent {
     public abstract void runEndTask(GameStateService gameStateService);
 
     public GameState getThisGameState() {
-        return this.gameStateConf.getThisGameState();
+        return this.gameStateSettings.getThisGameState();
     }
 
     protected void setCountdownTime(int time) {
-        this.gameStateConf.setCountdownTime(time);
+        this.gameStateSettings.setCountdownTime(time);
         return;
     }
 
     public int getCountdownTime() {
-        return this.gameStateConf.getCountdownTime();
+        return this.gameStateSettings.getCountdownTime();
     }
 
     public GameState getPrevGameState() {
-        return this.gameStateConf.getPrevGameState();
+        return this.gameStateSettings.getPrevGameState();
     }
 
     public GameState getNexGameState() {
-        return this.gameStateConf.getNexGameState();
+        return this.gameStateSettings.getNexGameState();
     }
 
 }

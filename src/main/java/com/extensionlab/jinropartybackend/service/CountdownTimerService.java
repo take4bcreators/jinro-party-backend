@@ -30,27 +30,28 @@ public class CountdownTimerService {
         if (setTimeMSec <= 0) {
             return;
         }
-        if (this.countdownTimer.getTimerState() == TimerState.Start) {
-            System.out.println("warm: timer is started already");
+        TimerState currentTimerState = this.getCurrentTimerState();
+        if (currentTimerState == TimerState.Start) {
+            System.out.println("warn: timer is started already");
             return;
         }
 
-        // タイマー初期化
+        // タイマーオブジェクトに必要な情報を登録
         this.countdownTimer.setStartTimeMSec(setTimeMSec);
         this.countdownTimer.setCurrentTimeMSec(setTimeMSec);
-
-        // 途中再開用の情報登録
         this.countdownTimer.setEndTask(endTask);
 
-        // 終了時のタスク
+        // 終了時に実行するタスクを設定
         this.countdownTimer.setServiceEndTask(() -> {
-            this.countdownTimer.setCurrentTimeMSec(0);
-            this.countdownTimer.setTimerState(TimerState.Stop);
-            // Debug
-            this.printTimerInfo("TIMER END");
+            // this.countdownTimer.setCurrentTimeMSec(0);
+            // this.countdownTimer.setTimerState(TimerState.Stop);
+            // // Debug
+            // this.printTimerInfo("TIMER END");
+            this.endTimer();
         });
 
-        // スタート
+        // タイマースタート
+        // 時間は先に初期化で設定した時間を指定
         this.startTimer(this.countdownTimer.getStartTimeMSec());
 
         // Debug
@@ -61,11 +62,11 @@ public class CountdownTimerService {
      * タイマー一時停止
      */
     public void pause() {
-        TimerState timerState = this.countdownTimer.getTimerState();
-        if (timerState == TimerState.Pause) {
+        TimerState currentTimerState = this.getCurrentTimerState();
+        if (currentTimerState == TimerState.Pause) {
             return;
         }
-        if (timerState == TimerState.Stop) {
+        if (currentTimerState == TimerState.Stop) {
             return;
         }
         Timer timer = this.countdownTimer.getTimer();
@@ -73,16 +74,19 @@ public class CountdownTimerService {
             return;
         }
 
-        // 登録スケジュール解除
+        // 登録していたスケジュールを解除
         timer.cancel();
 
-        // 途中再開用の情報登録
-        long endedTime = System.currentTimeMillis();
-        long elapsedTime = endedTime - this.countdownTimer.getStartedTime();
-        long currentTimeMSec = this.countdownTimer.getCurrentTimeMSec();
-        this.countdownTimer.setCurrentTimeMSec(currentTimeMSec - elapsedTime);
+        // 現在のカウントを取得して、途中再開のために登録
+        // long endedTimeStamp = System.currentTimeMillis();
+        // long startTimeStamp = this.countdownTimer.getStartedTimeStamp();
+        // long elapsedTimeMSec = endedTimeStamp - startTimeStamp;
+        // long currentSetTimeMSec = this.countdownTimer.getCurrentTimeMSec();
+        // long newSetTimeMSec = currentSetTimeMSec - elapsedTimeMSec;
+        long newSetTimeMSec = this.getCurrentTimeCountMSec();
+        this.countdownTimer.setCurrentTimeMSec(newSetTimeMSec);
 
-        // 状態変更
+        // 状態を「一時停止」に変更
         this.countdownTimer.setTimerState(TimerState.Pause);
 
         // Debug
@@ -93,11 +97,11 @@ public class CountdownTimerService {
      * タイマー再開
      */
     public void resume() {
-        TimerState timerState = this.countdownTimer.getTimerState();
-        if (timerState == TimerState.Start) {
+        TimerState currentTimerState = this.getCurrentTimerState();
+        if (currentTimerState == TimerState.Start) {
             return;
         }
-        if (timerState == TimerState.Stop) {
+        if (currentTimerState == TimerState.Stop) {
             return;
         }
         long currentTimeMSec = this.countdownTimer.getCurrentTimeMSec();
@@ -106,7 +110,7 @@ public class CountdownTimerService {
         }
 
         // 途中再開用の情報再登録
-        this.countdownTimer.setStartedTime(System.currentTimeMillis());
+        // this.countdownTimer.setStartedTimeStamp(System.currentTimeMillis());
 
         // 開始
         this.startTimer(currentTimeMSec);
@@ -115,11 +119,17 @@ public class CountdownTimerService {
         this.printTimerInfo("TIMER RESUME");
     }
 
+    /**
+     * タイマー開始
+     * 
+     * @param startTime
+     */
     private void startTimer(long startTime) {
-        // 途中再開用に現在時刻を登録
-        this.countdownTimer.setStartedTime(System.currentTimeMillis());
+        // 現在時刻を開始時のタイムスタンプとして登録
+        long currentTimeStamp = System.currentTimeMillis();
+        this.countdownTimer.setStartedTimeStamp(currentTimeStamp);
 
-        // 終了時のタスクを取得
+        // 終了時に実行するタスクを取得
         Runnable serviceEndTask = this.countdownTimer.getServiceEndTask();
         Runnable endTask = this.countdownTimer.getEndTask();
 
@@ -134,15 +144,66 @@ public class CountdownTimerService {
         };
         this.countdownTimer.getTimer().schedule(task, startTime);
 
-        // 状態の変更
+        // 状態を「開始」に変更
         this.countdownTimer.setTimerState(TimerState.Start);
     }
 
+    /**
+     * タイマー終了
+     */
+    private void endTimer() {
+        // 現在のカウントを 0 に設定
+        this.countdownTimer.setCurrentTimeMSec(0);
+
+        // 状態を「停止」に変更
+        this.countdownTimer.setTimerState(TimerState.Stop);
+
+        // Debug
+        this.printTimerInfo("TIMER END");
+    }
+
+    /**
+     * タイマー情報出力
+     * 
+     * @param label
+     */
     private void printTimerInfo(String label) {
         System.out.println("debug: " + label);
         System.out.println("this.countdownMSec: " + this.countdownTimer.getStartTimeMSec());
         System.out.println("this.elapsedMSec: " + this.countdownTimer.getCurrentTimeMSec());
         System.out.println("this.timerState: " + this.countdownTimer.getTimerState());
+    }
+
+    /**
+     * 現在のタイムカウントをMSecで取得
+     * 
+     * @return
+     */
+    public long getCurrentTimeCountMSec() {
+        TimerState currentTimerState = this.getCurrentTimerState();
+        if (currentTimerState == TimerState.Stop) {
+            return 0;
+        }
+        if (currentTimerState == TimerState.Pause) {
+            long currentSetTimeMSec = this.countdownTimer.getCurrentTimeMSec();
+            return currentSetTimeMSec;
+        }
+        long currentTimeStamp = System.currentTimeMillis();
+        long startTimeStamp = this.countdownTimer.getStartedTimeStamp();
+        long elapsedTimeMSec = currentTimeStamp - startTimeStamp;
+        long currentSetTimeMSec = this.countdownTimer.getCurrentTimeMSec();
+        long currentTimeCountMSec = currentSetTimeMSec - elapsedTimeMSec;
+        return currentTimeCountMSec;
+    }
+
+    /**
+     * 現在のタイマー状態を取得
+     * 
+     * @return
+     */
+    public TimerState getCurrentTimerState() {
+        TimerState timerState = this.countdownTimer.getTimerState();
+        return timerState;
     }
 
 }
