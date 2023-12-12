@@ -55,17 +55,6 @@ public class MainWebSocketRoutingService {
                 var gameState = this.mainWebSocketProcessService.extractGameState(receiveData);
                 this.gameStateService.execChangeStateTask(gameState);
                 break;
-            case CountdownTimerStart:
-                // @todo
-                break;
-            case CountdownTimerPause:
-                this.gameTimerService.pauseTimer();
-                this.mainWebSocketProcessService.countdownTimerPause();
-                break;
-            case CountdownTimerResume:
-                this.gameTimerService.resumeTimer();
-                this.mainWebSocketProcessService.countdownTimerResume();
-                break;
             case ReturnCurrentGameState:
                 this.mainWebSocketProcessService.returnCurrentGameState(receiveData);
                 break;

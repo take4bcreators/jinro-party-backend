@@ -34,7 +34,7 @@ public class DayPhaseComponent extends GameStateComponent {
 
     @Override
     public void runStartTask() {
-        this.mainWebSocketProcessService.countdownTimerStart(this.getCountdownTime());
+        // this.mainWebSocketProcessService.countdownTimerStart(this.getCountdownTime());
     }
 
     @Override

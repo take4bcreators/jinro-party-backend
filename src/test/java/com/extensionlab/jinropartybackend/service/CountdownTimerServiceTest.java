@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 // import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.extensionlab.jinropartybackend.enums.GameState;
+
 @SpringBootTest
 public class CountdownTimerServiceTest {
 
@@ -18,7 +20,7 @@ public class CountdownTimerServiceTest {
 
     @Test
     void testGetGameState() {
-        this.countdownTimerService.start(3000, null);
+        this.countdownTimerService.start(GameState.Empty, 3000, null);
 
         System.out.println(" ----- ↓ TEST ↓ -----");
         long currentTimeCount = this.countdownTimerService.getCurrentTimeCountMSec();

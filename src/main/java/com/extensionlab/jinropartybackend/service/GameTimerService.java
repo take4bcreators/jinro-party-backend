@@ -19,6 +19,8 @@ public class GameTimerService {
 
     public void startStateTask(GameState gameState, GameStateService gameStateService) {
         System.out.println("  ---- startStateTask ---- ");
+
+        // 現在のゲーム状態のオブジェクトを取得
         Optional<GameStateComponent> gameStateCompWrapper = this.gameStateRoutingService
                 .getThisGameStateComponent(gameState);
         if (gameStateCompWrapper.isEmpty()) {
@@ -26,14 +28,20 @@ public class GameTimerService {
         }
         GameStateComponent gameStateComponent = gameStateCompWrapper.get();
         System.out.println("This Game State: " + gameStateComponent.getThisGameState());
+
+        // カウントダウン開始前に行うタスクを実行
         gameStateComponent.runInitTask();
+
+        // カウントダウン時間を取得してカウントダウン開始
         int time = gameStateComponent.getCountdownTime();
         System.out.println("Time: " + time);
         if (time > 0) {
-            timerService.start(time, () -> {
+            timerService.start(gameState, time, () -> {
                 gameStateComponent.runEndTask(gameStateService);
             });
         }
+
+        // カウントダウン開始後に行うタスクを実行
         gameStateComponent.runStartTask();
     }
 

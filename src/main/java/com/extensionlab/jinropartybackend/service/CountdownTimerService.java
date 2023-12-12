@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import org.springframework.stereotype.Service;
 
+import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.enums.TimerState;
 import com.extensionlab.jinropartybackend.model.common.CountdownTimer;
 
@@ -12,10 +13,12 @@ import com.extensionlab.jinropartybackend.model.common.CountdownTimer;
 public class CountdownTimerService {
 
     private CountdownTimer countdownTimer;
+    private GameState timerGameState;
 
     public CountdownTimerService() {
         this.countdownTimer = new CountdownTimer();
         this.countdownTimer.setTimerState(TimerState.Stop);
+        this.timerGameState = GameState.Empty;
     }
 
     /**
@@ -26,7 +29,7 @@ public class CountdownTimerService {
      * @param setTimeMSec
      *            時間（ミリ秒）
      */
-    public void start(int setTimeMSec, Runnable endTask) {
+    public void start(GameState gameState, int setTimeMSec, Runnable endTask) {
         if (setTimeMSec <= 0) {
             return;
         }
@@ -53,6 +56,9 @@ public class CountdownTimerService {
         // タイマースタート
         // 時間は先に初期化で設定した時間を指定
         this.startTimer(this.countdownTimer.getStartTimeMSec());
+
+        // 現在のゲームの状態を更新
+        this.timerGameState = gameState;
 
         // Debug
         this.printTimerInfo("TIMER START");
@@ -204,6 +210,15 @@ public class CountdownTimerService {
     public TimerState getCurrentTimerState() {
         TimerState timerState = this.countdownTimer.getTimerState();
         return timerState;
+    }
+
+    /**
+     * 現在のゲーム状態を取得
+     * 
+     * @return
+     */
+    public GameState getCurrentTimerGameState() {
+        return this.timerGameState;
     }
 
 }

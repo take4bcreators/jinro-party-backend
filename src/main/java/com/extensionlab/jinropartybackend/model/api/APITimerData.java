@@ -1,5 +1,6 @@
 package com.extensionlab.jinropartybackend.model.api;
 
+import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.enums.TimerState;
 
 import lombok.AllArgsConstructor;
@@ -14,4 +15,6 @@ public class APITimerData {
     long timeCountMSec;
     /** タイマー状態 */
     TimerState timerState;
+    /** ゲーム状態 */
+    GameState gameState;
 }

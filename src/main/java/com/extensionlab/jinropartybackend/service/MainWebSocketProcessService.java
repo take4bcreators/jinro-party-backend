@@ -208,17 +208,22 @@ public class MainWebSocketProcessService {
         this.sendMTSite(action, "", "", "");
     }
 
-    public void countdownTimerStart(int time) {
-        String timeText = String.valueOf(time);
-        this.sendMTAndGMSite(WsRequestAction.CountdownTimerStart, timeText);
-    }
+    // public void countdownTimerStart(int time) {
+    // String timeText = String.valueOf(time);
+    // this.sendMTAndGMSite(WsRequestAction.CountdownTimerStart, timeText);
+    // }
 
-    public void countdownTimerPause() {
-        this.sendMTAndGMSite(WsRequestAction.CountdownTimerPause);
-    }
+    // public void countdownTimerPause() {
+    // this.sendMTAndGMSite(WsRequestAction.CountdownTimerPause);
+    // }
 
-    public void countdownTimerResume() {
-        this.sendMTAndGMSite(WsRequestAction.CountdownTimerResume);
+    // public void countdownTimerResume() {
+    // this.sendMTAndGMSite(WsRequestAction.CountdownTimerResume);
+    // }
+
+    public void timerStateChange() {
+        GameState currentGameState = this.gameDataService.getGameState();
+        this.sendMTAndGMSite(WsRequestAction.TimerStateChange, currentGameState.toString());
     }
 
     public void returnEntryPlayerCount(int playerCount) {
