@@ -24,4 +24,6 @@ public enum WsRequestAction {
     ReturnCurrentGameState,
     /** エントリープレイヤー数 */
     ReturnEntryPlayerCount,
+    /** 投票テーブル変更 */
+    VoteTableChange,
 }

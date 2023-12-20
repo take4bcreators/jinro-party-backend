@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.extensionlab.jinropartybackend.model.api.APIReplyProcessResult;
 import com.extensionlab.jinropartybackend.model.api.APISendVotePlayerData;
+import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
 import com.extensionlab.jinropartybackend.service.VotesService;
 
 @RestController
@@ -16,6 +17,9 @@ public class SaveMainVoteController {
 
     @Autowired
     VotesService votesService;
+
+    @Autowired
+    MainWebSocketProcessService mainWebSocketProcessService;
 
     @PostMapping("/api/post-save-main-vote")
     public APIReplyProcessResult post(@ModelAttribute APISendVotePlayerData postData) {
@@ -26,6 +30,9 @@ public class SaveMainVoteController {
         } catch (Exception e) {
             System.err.println(e);
             replyData.setResult(false);
+        }
+        if (replyData.isResult()) {
+            this.mainWebSocketProcessService.returnIfVote();
         }
         return replyData;
     }

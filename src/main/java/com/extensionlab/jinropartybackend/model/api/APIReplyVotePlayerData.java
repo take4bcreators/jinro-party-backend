@@ -1,5 +1,7 @@
 package com.extensionlab.jinropartybackend.model.api;
 
+import com.extensionlab.jinropartybackend.model.interfaces.VotePlayersBase;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class APIReplyVotePlayerData {
+public class APIReplyVotePlayerData implements VotePlayersBase {
     /** 投票プレイヤーデバイスID */
     private String voterDeviceId;
 

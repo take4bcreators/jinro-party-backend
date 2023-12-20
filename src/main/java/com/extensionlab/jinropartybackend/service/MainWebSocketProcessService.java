@@ -1,6 +1,7 @@
 package com.extensionlab.jinropartybackend.service;
 
 import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.extensionlab.jinropartybackend.enums.GameState;
@@ -173,6 +174,41 @@ public class MainWebSocketProcessService {
         this.sendMTAndGMSite(action, "", "", "");
     }
 
+    public void sendGMSite(WsRequestAction action, String param01, String param02, String param03) {
+        if (param01 == null) {
+            param01 = "";
+        }
+        if (param02 == null) {
+            param02 = "";
+        }
+        if (param03 == null) {
+            param03 = "";
+        }
+        APIWsData returnData = new APIWsData(
+                WsDestinationType.GameMasterSite,
+                "",
+                WsSenderType.Server,
+                "",
+                action,
+                param01,
+                param02,
+                param03);
+        String returnJsonToGM = this.convertWsDataToJson(returnData);
+        this.sendJSONTextAll(returnJsonToGM);
+    }
+
+    public void sendGMSite(WsRequestAction action, String param01, String param02) {
+        this.sendGMSite(action, param01, param02, "");
+    }
+
+    public void sendGMSite(WsRequestAction action, String param01) {
+        this.sendGMSite(action, param01, "", "");
+    }
+
+    public void sendGMSite(WsRequestAction action) {
+        this.sendGMSite(action, "", "", "");
+    }
+
     public void sendMTSite(WsRequestAction action, String param01, String param02, String param03) {
         if (param01 == null) {
             param01 = "";
@@ -230,4 +266,9 @@ public class MainWebSocketProcessService {
         String playerCountStr = String.valueOf(playerCount);
         this.sendMTSite(WsRequestAction.ReturnEntryPlayerCount, playerCountStr);
     }
+
+    public void returnIfVote() {
+        this.sendGMSite(WsRequestAction.VoteTableChange);
+    }
+
 }
