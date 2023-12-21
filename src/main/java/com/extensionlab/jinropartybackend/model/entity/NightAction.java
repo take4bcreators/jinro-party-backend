@@ -1,6 +1,7 @@
 package com.extensionlab.jinropartybackend.model.entity;
 
 import com.extensionlab.jinropartybackend.enums.PlayerRole;
+import com.extensionlab.jinropartybackend.model.interfaces.NightActionBase;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "night_action", schema = "prd")
 @IdClass(value = NightActionPK.class)
-public class NightAction {
+public class NightAction implements NightActionBase {
 
     @Id
     @Column(name = "game_data_id")

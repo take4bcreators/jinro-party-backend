@@ -6,13 +6,17 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.extensionlab.jinropartybackend.model.api.APIMultiPlayerBasicData;
+import com.extensionlab.jinropartybackend.model.api.APINightActionData;
 import com.extensionlab.jinropartybackend.model.api.APIPlayerBasicData;
+import com.extensionlab.jinropartybackend.model.api.APIPlayerFullData;
 import com.extensionlab.jinropartybackend.model.api.APIReplyAllVotePlayerData;
 import com.extensionlab.jinropartybackend.model.api.APIReplyVotePlayerData;
 import com.extensionlab.jinropartybackend.model.common.PlayerBasic;
 import com.extensionlab.jinropartybackend.model.entity.DropoutPlayerData;
 import com.extensionlab.jinropartybackend.model.interfaces.GamePlayer;
+import com.extensionlab.jinropartybackend.model.interfaces.NightActionBase;
 import com.extensionlab.jinropartybackend.model.interfaces.PlayerBase;
+import com.extensionlab.jinropartybackend.model.interfaces.PlayerFullBase;
 import com.extensionlab.jinropartybackend.model.interfaces.VotePlayersBase;
 
 @Service
@@ -68,6 +72,36 @@ public class DataTransferService {
         var newList = this.toAPIReplyVotePlayerDataList(srcList);
         var replyData = new APIReplyAllVotePlayerData(newList);
         return replyData;
+    }
+
+    public <T extends PlayerFullBase> List<APIPlayerFullData> toAPIPlayerFullDataList(List<T> srcList) {
+        List<APIPlayerFullData> newList = new ArrayList<>();
+        srcList.stream().forEach((src) -> {
+            newList.add(new APIPlayerFullData(
+                    src.getDeviceId(),
+                    src.getSessionId(),
+                    src.getPlayerName(),
+                    src.getPlayerIcon(),
+                    src.getPlayerRole(),
+                    src.getPlayerTeam(),
+                    src.isSelfRoleCheck(),
+                    src.getPlayerState()));
+        });
+        return newList;
+    }
+
+    public <T extends NightActionBase> List<APINightActionData> toAPINightActionDataList(List<T> srcList) {
+        List<APINightActionData> newList = new ArrayList<>();
+        srcList.stream().forEach((src) -> {
+            newList.add(new APINightActionData(
+                    src.getDeviceId(),
+                    src.getPlayerRole(),
+                    src.getReceiverDeviceId(),
+                    src.getReceiverPlayerName(),
+                    src.getReceiverPlayerIcon(),
+                    src.getReceiverPlayerRole()));
+        });
+        return newList;
     }
 
 }

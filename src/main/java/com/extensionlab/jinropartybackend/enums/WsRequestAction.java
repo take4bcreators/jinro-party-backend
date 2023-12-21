@@ -26,4 +26,8 @@ public enum WsRequestAction {
     ReturnEntryPlayerCount,
     /** 投票テーブル変更 */
     VoteTableChange,
+    /** 役職確認更新 */
+    SelfRoleCheckUpdate,
+    /** 夜アクション更新 */
+    NightActionUpdate,
 }

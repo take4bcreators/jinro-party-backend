@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.extensionlab.jinropartybackend.model.api.APIReplyProcessResult;
 import com.extensionlab.jinropartybackend.model.api.APISendNightActionData;
 import com.extensionlab.jinropartybackend.service.GameProgressService;
+import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
 
 @RestController
 @CrossOrigin
@@ -17,12 +18,18 @@ public class ExecHunterActionController {
     @Autowired
     GameProgressService gameProgressService;
 
+    @Autowired
+    MainWebSocketProcessService mainWebSocketProcessService;
+
     @PostMapping("/api/post-exec-hunter-action")
     public APIReplyProcessResult post(@ModelAttribute APISendNightActionData postData) {
         String deviceId = postData.getDeviceId();
         String receiverDeviceId = postData.getReceiverDeviceId();
         boolean result = this.gameProgressService.execHunterAction(deviceId, receiverDeviceId);
         var replyData = new APIReplyProcessResult(result);
+        if (replyData.isResult()) {
+            this.mainWebSocketProcessService.returnIfNightActionUpdate();
+        }
         return replyData;
     }
 

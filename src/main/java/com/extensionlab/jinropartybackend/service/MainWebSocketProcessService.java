@@ -271,4 +271,12 @@ public class MainWebSocketProcessService {
         this.sendGMSite(WsRequestAction.VoteTableChange);
     }
 
+    public void returnIfSelfRoleCheckUpdate() {
+        this.sendGMSite(WsRequestAction.SelfRoleCheckUpdate);
+    }
+
+    public void returnIfNightActionUpdate() {
+        this.sendGMSite(WsRequestAction.NightActionUpdate);
+    }
+
 }

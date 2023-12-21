@@ -10,6 +10,7 @@ import com.extensionlab.jinropartybackend.enums.GameState;
 import com.extensionlab.jinropartybackend.model.api.APIReplyProcessResult;
 import com.extensionlab.jinropartybackend.model.api.APISendDeviceId;
 import com.extensionlab.jinropartybackend.service.GameStateService;
+import com.extensionlab.jinropartybackend.service.MainWebSocketProcessService;
 import com.extensionlab.jinropartybackend.service.PlayerInfoService;
 
 @RestController
@@ -21,6 +22,9 @@ public class SelfRoleCheckedController {
 
     @Autowired
     GameStateService gameStateService;
+
+    @Autowired
+    MainWebSocketProcessService mainWebSocketProcessService;
 
     @PostMapping("/api/post-self-role-checked")
     public APIReplyProcessResult post(@ModelAttribute APISendDeviceId postData) {
@@ -34,6 +38,9 @@ public class SelfRoleCheckedController {
             return replyData;
         }
         replyData.setResult(true);
+        if (replyData.isResult()) {
+            this.mainWebSocketProcessService.returnIfSelfRoleCheckUpdate();
+        }
         if (this.playerInfoService.allPlayerChecked()) {
             var gameState = GameState.DayPhaseStart;
             try {
