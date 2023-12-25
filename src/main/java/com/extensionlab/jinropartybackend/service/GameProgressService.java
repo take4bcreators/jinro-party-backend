@@ -416,44 +416,53 @@ public class GameProgressService {
                         werewolfData.getReceiverPlayerIcon()));
     }
 
-    public boolean checkGameEnd() {
+    private PlayerTeam getWinningTeam(GameState gameState) {
         List<PlayerInfo> allAlivePlayerData = this.playerInfoService.getAllAlivePlayerData();
+        // 人狼の数が0の場合は村人陣営の勝利
         long werewolfCount = allAlivePlayerData
                 .stream()
                 .filter(e -> e.getPlayerRole().equals(PlayerRole.Werewolf))
                 .count();
         if (werewolfCount == 0) {
-            return true;
+            return PlayerTeam.Townsfolk;
         }
+        // 村人陣営の数が人狼の数以下であれば人狼チームの勝利
         long otherCount = allAlivePlayerData
                 .stream()
                 .filter(e -> !e.getPlayerRole().equals(PlayerRole.Werewolf))
                 .count();
         if (otherCount <= werewolfCount) {
-            return true;
+            return PlayerTeam.WerewolfPack;
         }
-        return false;
+        // これ以降は 追放者発表 状態の際に判定
+        if (gameState != GameState.ExileAnnouncement) {
+            return PlayerTeam.Empty;
+        }
+        // 夜のフェーズに行く際に、
+        // ハンターがおらず、その他 - 人狼 の人数が 1人 の場合
+        // (次の夜で確実に決着する場合) は人狼チームの勝利
+        long hunterCount = allAlivePlayerData
+                .stream()
+                .filter(e -> e.getPlayerRole().equals(PlayerRole.Hunter))
+                .count();
+        long teamCountDiff = otherCount - werewolfCount;
+        if (hunterCount == 0 && teamCountDiff <= 1) {
+            return PlayerTeam.WerewolfPack;
+        }
+        return PlayerTeam.Empty;
     }
 
-    public void updateWinningTeam() {
-        List<PlayerInfo> allAlivePlayerData = this.playerInfoService.getAllAlivePlayerData();
-        long werewolfCount = allAlivePlayerData
-                .stream()
-                .filter(e -> e.getPlayerRole().equals(PlayerRole.Werewolf))
-                .count();
-        if (werewolfCount == 0) {
-            this.gameDataService.updateWinningTeam(PlayerTeam.Townsfolk);
-            return;
+    public boolean checkGameEnd(GameState gameState) {
+        var winningTeam = this.getWinningTeam(gameState);
+        if (winningTeam == PlayerTeam.Empty) {
+            return false;
         }
-        long otherCount = allAlivePlayerData
-                .stream()
-                .filter(e -> !e.getPlayerRole().equals(PlayerRole.Werewolf))
-                .count();
-        if (otherCount <= werewolfCount) {
-            this.gameDataService.updateWinningTeam(PlayerTeam.WerewolfPack);
-            return;
-        }
-        this.gameDataService.updateWinningTeam(PlayerTeam.Empty);
+        return true;
+    }
+
+    public void updateWinningTeam(GameState gameState) {
+        var winningTeam = this.getWinningTeam(gameState);
+        this.gameDataService.updateWinningTeam(winningTeam);
         return;
     }
 

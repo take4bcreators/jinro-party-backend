@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class APIWinningTeam {
+    /** 勝利チーム */
     private PlayerTeam winningTeam;
 }

@@ -27,15 +27,6 @@ public class DropoutPlayerDataService {
         return;
     }
 
-    // /**
-    // * リスト登録
-    // */
-    // @Transactional
-    // public void registryFromList(List<DropoutPlayerData> dropoutPlayerDataList) {
-    // this.repository.saveAll(dropoutPlayerDataList);
-    // return;
-    // }
-
     @Transactional
     public void registryData(DropoutPlayerData dropoutPlayerData) {
         this.repository.save(dropoutPlayerData);

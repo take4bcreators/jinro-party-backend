@@ -28,14 +28,13 @@ public class ExileAnnouncementComponent extends GameStateComponent {
 
     @Override
     public void runStartTask() {
-        // this.mainWebSocketProcessService.countdownTimerStart(this.getCountdownTime());
     }
 
     @Override
     public void runEndTask(GameStateService gameStateService) {
         this.gameProgressService.updatePlayerStateForDropOutPlayer();
-        if (this.gameProgressService.checkGameEnd()) {
-            this.gameProgressService.updateWinningTeam();
+        if (this.gameProgressService.checkGameEnd(this.getThisGameState())) {
+            this.gameProgressService.updateWinningTeam(this.getThisGameState());
             gameStateService.execChangeStateTask(GameState.GameEnd);
             return;
         }

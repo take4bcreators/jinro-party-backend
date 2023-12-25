@@ -46,10 +46,6 @@ public class CountdownTimerService {
 
         // 終了時に実行するタスクを設定
         this.countdownTimer.setServiceEndTask(() -> {
-            // this.countdownTimer.setCurrentTimeMSec(0);
-            // this.countdownTimer.setTimerState(TimerState.Stop);
-            // // Debug
-            // this.printTimerInfo("TIMER END");
             this.endTimer();
         });
 
@@ -84,11 +80,6 @@ public class CountdownTimerService {
         timer.cancel();
 
         // 現在のカウントを取得して、途中再開のために登録
-        // long endedTimeStamp = System.currentTimeMillis();
-        // long startTimeStamp = this.countdownTimer.getStartedTimeStamp();
-        // long elapsedTimeMSec = endedTimeStamp - startTimeStamp;
-        // long currentSetTimeMSec = this.countdownTimer.getCurrentTimeMSec();
-        // long newSetTimeMSec = currentSetTimeMSec - elapsedTimeMSec;
         long newSetTimeMSec = this.getCurrentTimeCountMSec();
         this.countdownTimer.setCurrentTimeMSec(newSetTimeMSec);
 
@@ -114,9 +105,6 @@ public class CountdownTimerService {
         if (currentTimeMSec <= 0) {
             return;
         }
-
-        // 途中再開用の情報再登録
-        // this.countdownTimer.setStartedTimeStamp(System.currentTimeMillis());
 
         // 開始
         this.startTimer(currentTimeMSec);

@@ -24,7 +24,6 @@ public class NightPhaseComponent extends GameStateComponent {
 
     @Override
     public void runStartTask() {
-        // this.mainWebSocketProcessService.countdownTimerStart(this.getCountdownTime());
     }
 
     @Override

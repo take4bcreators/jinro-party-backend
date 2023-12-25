@@ -12,12 +12,6 @@ public enum WsRequestAction {
     GameStateUpdate,
     /** ゲーム画面変更 */
     GameScreenChange,
-    // /** カウントダウンタイマー開始 */
-    // CountdownTimerStart,
-    // /** カウントダウンタイマー一時停止 */
-    // CountdownTimerPause,
-    // /** カウントダウンタイマー再開 */
-    // CountdownTimerResume,
     /** タイマー状態変更 */
     TimerStateChange,
     /** ゲーム状態確認 */
