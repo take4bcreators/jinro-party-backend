@@ -73,7 +73,7 @@ public class GameProgressService {
         int notWerewolfCount = playerCount - werewolfCount;
 
         // 特殊役職リストの取得
-        List<PlayerRole> specialRoleList = this.getSpecialRoleList(notWerewolfCount);
+        List<PlayerRole> specialRoleList = this.getSpecialRoleList(notWerewolfCount, werewolfCount);
 
         // 市民リストの生成
         List<PlayerRole> citizenList = this.generateCitizenList(notWerewolfCount);
@@ -129,18 +129,38 @@ public class GameProgressService {
         return werewolfList;
     }
 
-    public List<PlayerRole> getSpecialRoleList(int notWerewolfCount) {
-        List<PlayerRole> specialRoleList;
+    // public List<PlayerRole> getSpecialRoleList(int notWerewolfCount) {
+    // List<PlayerRole> specialRoleList;
+    // if (notWerewolfCount <= 2) {
+    // // プレイヤー数が3 (人狼以外の数が2) の場合は、残りは市民にする
+    // specialRoleList = new ArrayList<PlayerRole>(Arrays.asList(PlayerRole.Citizen,
+    // PlayerRole.Citizen));
+    // } else if (notWerewolfCount == 3) {
+    // // プレイヤー数が4 (人狼以外の数が3) の場合は、狂人を除外する
+    // specialRoleList = new ArrayList<PlayerRole>(
+    // Arrays.asList(PlayerRole.Seer, PlayerRole.Medium, PlayerRole.Hunter));
+    // } else {
+    // specialRoleList = new ArrayList<PlayerRole>(
+    // Arrays.asList(PlayerRole.Seer, PlayerRole.Medium, PlayerRole.Hunter,
+    // PlayerRole.Madman));
+    // }
+    // return specialRoleList;
+    // }
+
+    public List<PlayerRole> getSpecialRoleList(int notWerewolfCount, int werewolfCount) {
+        // 人狼以外の数が2人以下の場合はすべて市民にする
         if (notWerewolfCount <= 2) {
-            // プレイヤー数が3 (人狼以外の数が2) の場合は、残りは市民にする
-            specialRoleList = new ArrayList<PlayerRole>(Arrays.asList(PlayerRole.Citizen, PlayerRole.Citizen));
-        } else if (notWerewolfCount == 3) {
-            // プレイヤー数が4 (人狼以外の数が3) の場合は、狂人を除外する
-            specialRoleList = new ArrayList<PlayerRole>(
-                    Arrays.asList(PlayerRole.Seer, PlayerRole.Medium, PlayerRole.Hunter));
-        } else {
-            specialRoleList = new ArrayList<PlayerRole>(
-                    Arrays.asList(PlayerRole.Seer, PlayerRole.Medium, PlayerRole.Hunter, PlayerRole.Madman));
+            return new ArrayList<>(Arrays.asList(PlayerRole.Citizen, PlayerRole.Citizen));
+        }
+        // 此処から先は、占い師と狩人は候補に必須
+        List<PlayerRole> specialRoleList = new ArrayList<>(Arrays.asList(PlayerRole.Seer, PlayerRole.Hunter));
+        // 人狼が2人以上の場合は霊能者を追加する
+        if (werewolfCount >= 2) {
+            specialRoleList.add(PlayerRole.Medium);
+        }
+        // 人狼以外が4人以上の場合は狂人を追加する
+        if (notWerewolfCount >= 4) {
+            specialRoleList.add(PlayerRole.Madman);
         }
         return specialRoleList;
     }
@@ -202,7 +222,6 @@ public class GameProgressService {
      * 未投票プレイヤーへの対応処理
      */
     public void processUnvotedPlayers() {
-        // @remind 決選投票の場合の処理を考える
         // 未投票プレイヤーリスト取得
         List<PlayerInfo> unvotedPlayerList = this.getUnvotedPlayerList();
         if (unvotedPlayerList.size() == 0) {
