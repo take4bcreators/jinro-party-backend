@@ -1,4 +1,4 @@
-package com.extensionlab.jinropartybackend.controller;
+package com.extensionlab.jinropartybackend.controller.get;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
